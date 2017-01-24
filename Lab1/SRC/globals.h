@@ -10,9 +10,10 @@
 
 #include "main.h"
 
-volatile unsigned short ADCvalue;
+volatile unsigned int ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;
 double timeVal;
+volatile unsigned long int interrupt;
 
 #endif /* SRC_GLOBALS_H_ */

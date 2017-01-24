@@ -13,5 +13,6 @@ void initGlobals(){
 	ADCValAvailable = 0;
 	timerCnt = 0;
 	timeVal = 0;
+	interrupt = 0;
 
 }
