@@ -18,10 +18,19 @@
  * @todo Create the function that will initialize USART1 for debugging use.
  */
 void debugUSARTInit(unsigned long baudrate){
+	//ensure that was handed a valid baud rate, otherwise set baud rate to be default
+	const long validBauds[14] = {110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};
+	unsigned long baud = DEFAULT_BAUD;
+	for(int i = 0; i < 13; i++) {
+		if(baudrate == validBauds[i]) {
+			baud = baudrate;
+			break;
+		}
+	}
 
 	//set the baudrate
-	UBRR1H = (unsigned char)((F_CLOCK / (16 * baudrate) - 1) >> 8);
-	UBRR1L = (unsigned char)(F_CLOCK / (16 * baudrate) - 1);
+	UBRR1H = (unsigned char)((F_CLOCK / (16 * baud) - 1) >> 8);
+	UBRR1L = (unsigned char)(F_CLOCK / (16 * baud) - 1);
 	UCSR1B = (1<<RXEN1)|(1<<TXEN1);
 	/* Set frame format: 8data, 2stop bit */
 	UCSR1C = (1<<USBS0)|(3<<UCSZ10);
@@ -38,7 +47,7 @@ void debugUSARTInit(unsigned long baudrate){
 void putCharDebug(char byteToSend){
 	/* Wait for empty transmit buffer */
 	while ( !( UCSR1A & (1<<UDRE1)) )
-	;
+		;
 	/* Put data into buffer, sends the data */
 	UDR1 = byteToSend;
 }

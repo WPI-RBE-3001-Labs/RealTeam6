@@ -12,12 +12,17 @@ unsigned long timerCnt = 0;
 
 
 ISR(TIMER1_OVF_vect){
+	//update the timer count every .455 seconds
 	timerCnt++;
+	if(timerCnt%11){
+		timerCnt++;
+	}
 }
 
 unsigned long getTimerCnt(){
 	return timerCnt;
 }
+
 /**
  * @brief Initializes the specified timer in the specified mode. This
  * header file provides constants for NORMAL operation mode and
@@ -34,7 +39,7 @@ unsigned long getTimerCnt(){
  */
 void initTimer(int timer, int mode, unsigned int comp){
 	TCCR1A = 0b00000000;
-	TCCR1B = 0b01000101;
+	TCCR1B = 0b01000011; //set up for 64 pre-scaler
 }
 
 /**

@@ -20,23 +20,28 @@
 void initADC(int channel){
 
 	//sets the corresponding channel to be an input pin
-	DDRAbits &= ~(1 << channel);
+	DDRA &= ~(1 << channel);
 
 	//Disables the DIDR0 register for the corresponding channel
 	//recommended by the data sheet to save power (25.8.6)
-	DIDR0bits |= (1 << channel);
+	DIDR0 |= (1 << channel);
 
 	//sets the Vref to be AVCC (5V)
-	ADMUXbits._REFS1 = 0;
-	ADMUXbits._REFS0 = 1;
+	ADMUX = 0 << 7;
+	ADMUX = 1 << 6;
 
 	//Set the ADC prescaler to 128
-	ADCSRAbits._ADPS2 = 1;
-	ADCSRAbits._ADPS1 = 1;
-	ADCSRAbits._ADPS0 = 1;
+	ADCSRA = 1 << 2;
+	ADCSRA = 1 << 1;
+	ADCSRA = 1;
+
+	//clears the ADMUX_MUX bits
+	ADMUX &= 0b11100000;
+	//sets the ADMUX_MUX bits to be the corresponding channel
+	ADMUX |= channel;
 
 	//enable the ADC
-	ADCSRAbits._ADEN = 1;
+	ADCSRA = 1 << 7;
 }
 
 /**
@@ -44,21 +49,23 @@ void initADC(int channel){
  *
  * @param channel  The ADC channel to disable.
  *
+ * does NOT clear the ADMUX_MUX bits
+ *
  */
 void clearADC(int channel){
 	//disable the ADC
-	ADCSRAbits._ADEN = 0;
+	ADCSRA = 0 << 7;
 
 	//sets the corresponding channel to be an output pin
-	DDRAbits |= (1 << channel);
+	DDRA |= (1 << channel);
 
 	//Enables the DIDR0 register for the corresponding channel
 	//recommended by the data sheet to save power (25.8.6)
-	DIDR0bits &= ~(1 << channel);
+	DIDR0 &= ~(1 << channel);
 
 	//sets the ADCL and ADCH bits to 0
-	ADCLbits = 0;
-	ADCHbits = 0;
+	ADCL = 0;
+	ADCH = 0;
 }
 
 /**
@@ -75,25 +82,25 @@ unsigned short getADC(int channel){
 	unsigned short adcVal = 0;
 
 	//clears the ADMUX.MUX[4:0] (used for channel selection)
-	ADMUXbits &= 0b11100000;
+	ADMUX &= 0b11100000;
 
-	ADMUXbits |= channel;
+	ADMUX |= channel;
 
 	//start conversion
-	ADCSRAbits._ADSC = 1;
+	ADCSRA = 1 << 6;
 
 	//wait for conversion to end
-	while (~(ADCSRAbits._ADSC)){
+	while (~(ADCSRA & 0b01000000)){
 		adcVal = 0;
 	}
 
 	//calculate results of the ADC conversion from ADCL and ADCH (reading ADCL first)
-	if(ADMUXbits._ADLAR == 1){ //ADC result is left shifted
-		adcVal |= (ADCLbits >> 6);
-		adcVal |= (ADCHbits >> 6);
+	if(ADMUX & 0b00100000){ //ADC result is left shifted
+		adcVal |= (ADCL >> 6);
+		adcVal |= (ADCH << 2);
 	} else {//ADC result is right shifted
-		adcVal |= ADCLbits;
-		adcVal |= (ADCHbits << 8);
+		adcVal |= ADCL;
+		adcVal |= (ADCH << 8);
 	}
 
 	return adcVal;

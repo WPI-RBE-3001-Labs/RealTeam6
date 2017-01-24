@@ -1,4 +1,4 @@
-SRC/USART.d SRC/USART.o: ../SRC/USART.c ../SRC/main.h \
+SRC/globals.d SRC/globals.o: ../SRC/globals.c ../SRC/main.h \
   C:\Users\nbeeten\Desktop\rbelib-master\RBELib\include/RBELib/RBELib.h \
   C:\Users\nbeeten\Desktop\rbelib-master\RBELib\include/RBELib/ADC.h \
   C:\Users\nbeeten\Desktop\rbelib-master\RBELib\include/RBELib/DAC.h \
