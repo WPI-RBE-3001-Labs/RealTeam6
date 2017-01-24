@@ -15,9 +15,13 @@ int main(){
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
 	freeRunADC(ADC_CHANNEL);
 
-	//print command to tell what do
-	printf("%s", "Press s to start recording data");
 
+
+	//print command to tell what do
+	printf("%s", "  Press s to start recording data  ");
+
+
+	//printf("%h", getADC(4));
 
 	while(getCharDebug() != 0x00){
 		//start timer 1 (numbers don't currently mean anything...awk...)
@@ -26,6 +30,14 @@ int main(){
 			printPotVal();
 		}
 	}
+
+
+
+
+}
+
+int returnBITS(){
+	return ADMUX;
 }
 
 /**
@@ -34,8 +46,8 @@ int main(){
  * @param potVal the 10 bit adc output
  * @return the Angle of the potentiometer
  */
-double ADCtoAngle(unsigned short potVal){
-	return potVal/MAX_ADC*5000;
+double ADCtoAngle(unsigned int potVal){
+	return ((double) potVal)/MAX_ADC*270;
 }
 
 /**
@@ -44,8 +56,8 @@ double ADCtoAngle(unsigned short potVal){
  * @param potVal the 10 bit adc output
  * @return the voltage across the potentiometer in mV
  */
-double ADCtoMiliV(unsigned short potVal){
-	return potVal/MAX_ADC*270;
+double ADCtoMiliV(unsigned int potVal){
+	return ((double) potVal)/MAX_ADC*5000;
 }
 
 /**
@@ -60,5 +72,5 @@ void printPotVal(){
 	potmV = ADCtoMiliV(ADCvalue);
 	timeVal = timerCnt * 0.5;
 
-	printf("%f, %d, %f, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
+	printf("%f, %d, %f, %f, %ld\n\r", timeVal, ADCvalue, potAngle, potmV, interrupt);
 }

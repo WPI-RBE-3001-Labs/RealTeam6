@@ -15,8 +15,9 @@
 #define MAX_ADC 1023
 #define ADC_CHANNEL 4
 
-double ADCtoAngle(unsigned short potVal);
-double ADCtoMiliV(unsigned short potVal);
+double ADCtoAngle(unsigned int potVal);
+double ADCtoMiliV(unsigned int potVal);
 void printPotVal();
+int returnBITS();
 
 #endif /* SRC_MAIN_H_ */
