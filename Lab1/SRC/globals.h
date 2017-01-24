@@ -13,5 +13,6 @@
 volatile unsigned short ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;
+double timeVal;
 
 #endif /* SRC_GLOBALS_H_ */

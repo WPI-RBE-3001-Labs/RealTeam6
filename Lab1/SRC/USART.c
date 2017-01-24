@@ -4,9 +4,11 @@
  *  Created on: Jan 23, 2017
  *      Author: nbeeten
  */
-#define F_CLOCK 1842000
+#define F_CLOCK 18432000
 
 #include "main.h"
+#include "avr/io.h"
+
 /**
  * @brief Initializes USART1 as a print terminal to the PC. This function
  * must check the incoming baudrate against the valid baudrates
@@ -18,6 +20,7 @@
  * @todo Create the function that will initialize USART1 for debugging use.
  */
 void debugUSARTInit(unsigned long baudrate){
+	/*
 	//ensure that was handed a valid baud rate, otherwise set baud rate to be default
 	const long validBauds[14] = {110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};
 	unsigned long baud = DEFAULT_BAUD;
@@ -27,14 +30,15 @@ void debugUSARTInit(unsigned long baudrate){
 			break;
 		}
 	}
+	*/
 
 	//set the baudrate
-	UBRR1H = (unsigned char)((F_CLOCK / (16 * baud) - 1) >> 8);
-	UBRR1L = (unsigned char)(F_CLOCK / (16 * baud) - 1);
-	UCSR1B = (1<<RXEN1)|(1<<TXEN1);
-	/* Set frame format: 8data, 2stop bit */
-	UCSR1C = (1<<USBS0)|(3<<UCSZ10);
+	UBRR1H = (unsigned char)((F_CLOCK / (16 * baudrate) - 1) >> 8);
+	UBRR1L = (unsigned char)(F_CLOCK / (16 * baudrate) - 1);
 
+	UCSR1B = 0b00011000;
+	/* Set frame format: 8data, 1stop bit */
+	UCSR1C = 0b00000110;
 }
 
 /**
@@ -46,8 +50,7 @@ void debugUSARTInit(unsigned long baudrate){
  */
 void putCharDebug(char byteToSend){
 	/* Wait for empty transmit buffer */
-	while ( !( UCSR1A & (1<<UDRE1)) )
-		;
+	while ( !( UCSR1A & (1 << UDRE1)));
 	/* Put data into buffer, sends the data */
 	UDR1 = byteToSend;
 }

@@ -12,5 +12,6 @@ void initGlobals(){
 	ADCvalue = 0;
 	ADCValAvailable = 0;
 	timerCnt = 0;
+	timeVal = 0;
 
 }

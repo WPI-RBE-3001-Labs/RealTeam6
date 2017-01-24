@@ -13,7 +13,7 @@
 #include "freerunADC.h"
 
 #define MAX_ADC 1023
-#define ADC_CHANNEL 3
+#define ADC_CHANNEL 4
 
 double ADCtoAngle(unsigned short potVal);
 double ADCtoMiliV(unsigned short potVal);

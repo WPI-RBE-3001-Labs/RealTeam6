@@ -40,6 +40,7 @@ unsigned long getTimerCnt(){
 void initTimer(int timer, int mode, unsigned int comp){
 	TCCR1A = 0b00000000;
 	TCCR1B = 0b01000011; //set up for 64 pre-scaler
+	TIMSK1 |= (1 << TOIE1); // enable the Overflow Interrupt
 }
 
 /**

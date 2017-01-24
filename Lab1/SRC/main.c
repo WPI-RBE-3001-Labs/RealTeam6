@@ -7,26 +7,23 @@
 #include "main.h"
 
 int main(){
-	//start USART at buad rate of 9600
-	debugUSARTInit(9600);
+	//start USART at buad rate of 115200
+	initRBELib();
+
+	debugUSARTInit(115200);
 
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
 	freeRunADC(ADC_CHANNEL);
-	//print command to tell what to do
-	printf("Press s to start recording data");
+
+	//print command to tell what do
+	printf("%s", "Press s to start recording data");
 
 
-	while(getCharDebug() != 's'){
-		//maybe broken^^ (not sure what USART_Recieve gives)
+	while(getCharDebug() != 0x00){
 		//start timer 1 (numbers don't currently mean anything...awk...)
 		initTimer(1, 1, 1);
-		unsigned long lastTimer = 0;
-		unsigned long currentTimer = 0;
 		while(1){
-			currentTimer = timerCnt;
-			if(lastTimer != currentTimer){
-				printPotVal();
-			}
+			printPotVal();
 		}
 	}
 }
@@ -57,12 +54,11 @@ double ADCtoMiliV(unsigned short potVal){
 void printPotVal(){
 	double potAngle = 0;
 	double potmV = 0;
-	unsigned long timeVal = 0;
 
 	//save all values to things that can be used in a print function
 	potAngle = ADCtoAngle(ADCvalue);
 	potmV = ADCtoMiliV(ADCvalue);
-	timeVal = timerCnt;
+	timeVal = timerCnt * 0.5;
 
-	printf("%f, %d, %f, %f", timeVal*.5, ADCvalue, potAngle, potmV);
+	printf("%f, %d, %f, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
 }
