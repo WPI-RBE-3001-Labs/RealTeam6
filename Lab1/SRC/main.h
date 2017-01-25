@@ -19,5 +19,8 @@ double ADCtoAngle(unsigned int potVal);
 double ADCtoMiliV(unsigned int potVal);
 void printPotVal();
 int returnBITS();
+void checkButtons();
+void initButtons();
+
 
 #endif /* SRC_MAIN_H_ */

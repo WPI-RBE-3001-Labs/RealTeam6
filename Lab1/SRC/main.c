@@ -6,6 +6,12 @@
  */
 #include "main.h"
 
+#define PART1 0
+#define PART2 1
+#define PART3 2
+
+#define MODE PART1
+
 int main(){
 	//start USART at buad rate of 115200
 	initRBELib();
@@ -15,24 +21,39 @@ int main(){
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
 	freeRunADC(ADC_CHANNEL);
 
+	switch(MODE){
 
+	case PART1:
+		//print command to tell user what to do
+		printf("%s", "  Press any letter to start recording data  ");
 
-	//print command to tell what do
-	printf("%s", "  Press s to start recording data  ");
-
-
-	//printf("%h", getADC(4));
-
-	while(getCharDebug() != 0x00){
-		//start timer 1 (numbers don't currently mean anything...awk...)
-		initTimer(1, 1, 1);
-		while(1){
-			printPotVal();
+		while(getCharDebug() != 0x00){
+			//start timer 1 (numbers don't currently mean anything...awk...)
+			initTimer(1, 1, 1);
+			while(1){
+				//prints pot values needed for part 1
+				printPotVal();
+			}
 		}
+		break; //end of case PART1
+
+	case PART2:
+		//inits the buttons on PORTB
+		initButtons();
+		//print command to tell user what to do
+		printf("%s", "  Press any letter to start recording data  ");
+
+		break;//end of case PART2
+
+	case PART3:
+		//inits the buttons on PORTB
+		initButtons();
+		//print command to tell user what to do
+		printf("%s", "  Press any letter to start recording data  ");
+
+		break;//end of case PART3
+
 	}
-
-
-
 
 }
 
@@ -73,4 +94,32 @@ void printPotVal(){
 	timeVal = timerCnt * 0.5;
 
 	printf("%f, %d, %f, %f, %ld\n\r", timeVal, ADCvalue, potAngle, potmV, interrupt);
+}
+
+/**
+ * @brief sets the button global variable to be the button that was pressed.
+ *
+ * Checks starting at port 7 and works down
+ */
+void checkButtons(){
+	if (PORTC7 == 1){
+		button = 7;
+	}
+	else if(PORTC6 == 1){
+		button = 6;
+	}
+	else if(PORTC5 == 1){
+		button = 5;
+	}
+	else if(PORTC4 == 1){
+		button = 4;
+	}
+}
+
+/**
+ * @brief inits the buttons on PORTB by setting all of PORTB pins to input
+ */
+void initButtons(){
+	//sets all of PortB to be inputs
+	DDRB &= 0b00000000;
 }

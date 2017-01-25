@@ -14,5 +14,6 @@ void initGlobals(){
 	timerCnt = 0;
 	timeVal = 0;
 	interrupt = 0;
+	button = 0;
 
 }

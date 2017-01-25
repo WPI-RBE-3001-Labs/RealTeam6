@@ -11,6 +11,6 @@
 /**
  * @brief inits the ADC to the given channel and sets the ADC to Free-run Mode with an interrupt firing when a conversion completes.
  */
-int freeRunADC(int channel);
+void freeRunADC(int channel);
 
 #endif /* SRC_FREERUNADC_H_ */

@@ -16,4 +16,6 @@ unsigned long timerCnt;
 double timeVal;
 volatile unsigned long int interrupt;
 
+short button;
+
 #endif /* SRC_GLOBALS_H_ */

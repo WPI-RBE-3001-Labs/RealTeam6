@@ -13,7 +13,7 @@ unsigned int initializer = (1 << ADIE)|(1 << ADSC);
 /**
  * @brief inits the ADC to the given channel and sets the ADC to Free-run Mode with an interrupt firing when a conversion completes.
  */
-int freeRunADC(int channel){
+void freeRunADC(int channel){
 
 	//disable the global interrupt while the ADC sets up
 	cli();
