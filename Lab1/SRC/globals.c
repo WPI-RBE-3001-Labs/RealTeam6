@@ -17,6 +17,6 @@ void initGlobals(){
 	interrupt = 0;
 	button = 6;
 	output = 0;
-	Thigh = 39;
+	Thigh = 0;
 
 }

@@ -15,7 +15,7 @@
 int main(){
 	//start USART at buad rate of 115200
 	initRBELib();
-
+	initGlobals();
 	debugUSARTInit(115200);
 
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
@@ -51,7 +51,7 @@ int main(){
 				//checkButtons();
 				outputPWM();
 				//prints values needed for part 2
-				printPWMVal();
+				//printPWMVal();
 			}
 		}
 		break;//end of case PART2
@@ -158,30 +158,41 @@ void checkButtons(){
  * @brief inits the buttons on PORTB by setting all of PORTB pins to input
  */
 void initButtons(){
-	//sets all of PortB to be inputs
-	DDRB &= 0b00000000;
+	//sets all of PortC to be inputs
+	DDRC &= 0b00000000;
 }
 
 void initPWMPin(){
-	//sets all of PortD to be outputs;
-	DDRD &= 0b11111111;
-	PORTD &= 0b00000000;
-	PIND &= 0b00000000;
+	//sets all of PortB to be outputs;
+	DDRB &= 0b11111111;
+	PORTB &= 0b00000000;
+	PINB &= 0b00000000;
 
 }
 
 void generatePWM(unsigned int countTo){
 	//if timer reaches countTo
-	if((PWMTimerCnt >= Thigh) && output){
+	switch(output){
+
+	case 1:
+	if(PWMTimerCnt >= countTo){
 		//switch port
 		output = 0;
 		PWMTimerCnt = 0;
-		PORTD = 0;
-	} else if((PWMTimerCnt >= Thigh) && ~output){
+		putCharDebug('p');
+		PORTB = 0b00000000;
+	}
+	break; //end case 1
+
+	case 0:
+	if(PWMTimerCnt >= countTo){
 		//switch port
 		output = 1;
 		PWMTimerCnt = 0;
-		PORTD = 1;
+		putCharDebug('s');
+		PORTB = 0b00000010;
+	}
+	break; //end case 0
 	}
 }
 
@@ -191,19 +202,19 @@ void outputPWM(){
 	case 7:
 		//generates a 100Hz signal
 		Thigh = 39;
-		generatePWM(78);
+		generatePWM(Thigh);
 		break;
 
 	case 6:
 		//generates 20Hz signal
 		Thigh = 195;
-		generatePWM(390);
+		generatePWM(Thigh);
 		break;
 
 	case 5:
 		//generates a 1Hz signal
 		Thigh = 3906;
-		generatePWM(7812);
+		generatePWM(Thigh);
 		break;
 	}
 }
