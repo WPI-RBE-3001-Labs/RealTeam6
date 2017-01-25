@@ -24,24 +24,26 @@ void initADC(int channel){
 
 	//Disables the DIDR0 register for the corresponding channel
 	//recommended by the data sheet to save power (25.8.6)
-	DIDR0 |= (1 << channel);
+	//DIDR0 |= (1 << channel);
 
 	//sets the Vref to be AVCC (5V)
-	ADMUX = 0 << 7;
-	ADMUX = 1 << 6;
+	ADMUX = (0 << 7)|(1 << 6);
+	//ADMUX = 1 << 6;
 
 	//Set the ADC prescaler to 128
-	ADCSRA = 1 << 2;
-	ADCSRA = 1 << 1;
-	ADCSRA = 1;
+	ADCSRA = (1 << 2)|(1 << 1)|(1);
+	//ADCSRA = 1 << 1;
+	//ADCSRA = 1;
 
 	//clears the ADMUX_MUX bits
-	ADMUX &= 0b11100000;
+	ADMUX = (0b11100000|channel);
+
 	//sets the ADMUX_MUX bits to be the corresponding channel
-	ADMUX |= channel;
+	// ADMUX |= channel;
 
 	//enable the ADC
-	ADCSRA = 1 << 7;
+	ADCSRA |= 1 << 7;
+
 }
 
 /**

@@ -10,9 +10,14 @@
 
 #include "main.h"
 
-volatile unsigned short ADCvalue;
+volatile unsigned int ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;
+unsigned long PWMTimerCnt;
 double timeVal;
+volatile unsigned long int interrupt;
+unsigned int Thigh;
+int output;
+short button;
 
 #endif /* SRC_GLOBALS_H_ */

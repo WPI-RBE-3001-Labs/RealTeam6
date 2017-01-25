@@ -3,7 +3,6 @@
 	<name>Lab1</name>
 	<comment></comment>
 	<projects>
-		<project>RBELib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

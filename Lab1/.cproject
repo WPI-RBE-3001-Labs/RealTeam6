@@ -32,6 +32,9 @@
 								<option id="de.innot.avreclipse.compiler.option.optimize.1553517497" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.779955019" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBELib/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\WinAVR-20100110\avr\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include-fixed&quot;"/>
 								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.3995489" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>

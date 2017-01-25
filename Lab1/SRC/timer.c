@@ -19,6 +19,10 @@ ISR(TIMER1_OVF_vect){
 	}
 }
 
+ISR(TIMER0_COMPA_vect){
+	PWMTimerCnt++;
+}
+
 unsigned long getTimerCnt(){
 	return timerCnt;
 }
@@ -38,9 +42,21 @@ unsigned long getTimerCnt(){
  *
  */
 void initTimer(int timer, int mode, unsigned int comp){
-	TCCR1A = 0b00000000;
-	TCCR1B = 0b01000011; //set up for 64 pre-scaler
-	TIMSK1 |= (1 << TOIE1); // enable the Overflow Interrupt
+	switch(timer){
+	case 1:
+		TCCR1A = 0b00000000;
+		TCCR1B = 0b01000011; //set up for 64 pre-scaler
+		TIMSK1 |= (1 << TOIE1); // enable the Overflow Interrupt
+		break;
+
+	case 0:
+		//set timer 0 to be in CTC mode
+		TCCR0A = 0b10000010; //set to CTC mode with the OC0A cleared on Compare Match
+		TCCR0B = 0b11000101; //set up for 1024 pre-scaler
+		TIMSK0 |= (1 << OCIE0A); // enable the OC0A Interrupt
+		OCR0A = comp;//set the number to count to
+		break;
+	}
 }
 
 /**

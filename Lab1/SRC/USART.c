@@ -20,7 +20,7 @@
  * @todo Create the function that will initialize USART1 for debugging use.
  */
 void debugUSARTInit(unsigned long baudrate){
-	/*
+
 	//ensure that was handed a valid baud rate, otherwise set baud rate to be default
 	const long validBauds[14] = {110, 150, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600};
 	unsigned long baud = DEFAULT_BAUD;
@@ -30,7 +30,7 @@ void debugUSARTInit(unsigned long baudrate){
 			break;
 		}
 	}
-	*/
+
 
 	//set the baudrate
 	UBRR1H = (unsigned char)((F_CLOCK / (16 * baudrate) - 1) >> 8);
