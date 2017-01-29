@@ -70,3 +70,6 @@ unsigned char getCharDebug(void){
 	return UDR1;
 
 }
+
+
+//just to see whats wrong
