@@ -18,6 +18,13 @@
 double ADCtoAngle(unsigned int potVal);
 double ADCtoMiliV(unsigned int potVal);
 void printPotVal();
+void printPWMVal();
 int returnBITS();
+void checkButtons();
+void initButtons();
+void initPWMPin();
+void generatePWM(unsigned int countTo);
+void outputPWM();
+
 
 #endif /* SRC_MAIN_H_ */
