@@ -12,8 +12,15 @@
 
 #define MODE PART1
 
+/////BIT MASKS FOR DAC/////
+#define WRITE_MODE 0b0000
+#define UPDATE_MODE 0b0001
+#define ADDRESS_A 0b0001
+#define ADDRESS_B 0b0010
+#define ADDRESS_ALL 0b1111
+
 int main(){
-	//start USART at buad rate of 115200
+	//start USART at baud rate of 115200
 	initRBELib();
 	initGlobals();
 	debugUSARTInit(115200);
@@ -219,4 +226,33 @@ void ramp(){
 	}
 }
 
+void DACsend(){
+	BYTE byteA = NULL;
+	BYTE byteB = NULL;
+	BYTE byteC = NULL;
+
+	//Write to DAC A
+	byteA = (WRITE_MODE << 4) | (ADDRESS_A);
+	byteB = DAC_VALUE_A >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
+	byteC = DAC_VALUE_A << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
+
+	//Write to DAC B
+	byteA = (WRITE_MODE << 4) | (ADDRESS_B);
+	byteB = DAC_VALUE_B >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
+	byteC = DAC_VALUE_B << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
+
+	//Update both DACs
+	byteA = (UPDATE_MODE << 4) | (ADDRESS_ALL);
+	byteB = 0;
+	byteC = 0;
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
+}
 
