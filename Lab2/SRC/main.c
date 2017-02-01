@@ -5,6 +5,7 @@
  *      Author: nbeeten
  */
 #include "main.h"
+#include "RBELib/RBELib.h"
 //#include "globals.h"
 
 #define PRINT_POT 0
@@ -50,15 +51,14 @@ int main(){
 
 	case TRIANGLE_WAVE:
 		//print command to tell user what to do
-		printf("%s", "  Press any letter to start recording data  ");
-		while(getCharDebug() != 0x00){
-			////start timer 1 (numbers don't currently mean anything...awk...)
-			initTimer(1, 1, 1);
-			while(1){
-				ramp();
-				setDAC(1, DAC_VALUE_A);
-				setDAC(2, DAC_VALUE_B);
-			}
+		printf("%s", "  starting  ");
+		////start timer 1 (numbers don't currently mean anything...awk...)
+		initTimer(1, 1, 1);
+		initSPI();
+		while(1){
+			//ramp();
+			setDAC(1, 1000);
+			//setDAC(2, 0);
 		}
 		break; //end of case TRIANGLE_WAVE
 
