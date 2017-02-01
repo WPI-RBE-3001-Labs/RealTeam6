@@ -108,6 +108,8 @@ unsigned short getADC(int channel){
 	return adcVal;
 }
 
+
+
 /**
  * @brief Change the channel the ADC is sampling if using interrupts.
  *

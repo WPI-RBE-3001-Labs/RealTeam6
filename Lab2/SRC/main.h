@@ -11,11 +11,14 @@
 #include "RBELib/RBELib.h"
 #include "globals.h"
 #include "freerunADC.h"
+#include "ADCcalc.h"
 
 #define MAX_ADC 1023
 #define ADC_CHANNEL 4
+#define DBUS0_CHANNEL 2
+#define DBUS1_CHANNEL 3
 
-double ADCtoAngle(unsigned int potVal);
+
 double ADCtoMiliV(unsigned int potVal);
 void printPotVal();
 void printPWMVal();

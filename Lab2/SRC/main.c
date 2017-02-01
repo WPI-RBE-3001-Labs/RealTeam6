@@ -10,16 +10,23 @@
 #define PART2 1
 #define PART3 2
 
-#define MODE PART2
+#define MODE PART1
+
+/////BIT MASKS FOR DAC/////
+#define WRITE_MODE 0b0000
+#define UPDATE_MODE 0b0001
+#define ADDRESS_A 0b0001
+#define ADDRESS_B 0b0010
+#define ADDRESS_ALL 0b1111
 
 int main(){
-	//start USART at buad rate of 115200
+	//start USART at baud rate of 115200
 	initRBELib();
 	initGlobals();
 	debugUSARTInit(115200);
 
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
-	freeRunADC(ADC_CHANNEL);
+	freeRunADC(DBUS0_CHANNEL);
 
 	switch(MODE){
 
@@ -86,25 +93,7 @@ int returnBITS(){
 	return ADMUX;
 }
 
-/**
- * @brief converts the 10 bit adc value to the pot angle
- *
- * @param potVal the 10 bit adc output
- * @return the Angle of the potentiometer
- */
-double ADCtoAngle(unsigned int potVal){
-	return ((double) potVal)/MAX_ADC*270;
-}
 
-/**
- * @brief converts the 10 bit adc value from the pot to the voltage through the pot in mV
- *
- * @param potVal the 10 bit adc output
- * @return the voltage across the potentiometer in mV
- */
-double ADCtoMiliV(unsigned int potVal){
-	return ((double) potVal)/MAX_ADC*5000;
-}
 
 /**
  * @brief prints the time stamp, pot value, pot angle, pot milivolts
@@ -118,7 +107,7 @@ void printPotVal(){
 	potmV = ADCtoMiliV(ADCvalue);
 	timeVal = timerCnt * 0.5;
 
-	printf("%f, %d, %f, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
+	printf("%f, %d, %g, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
 }
 
 void printPWMVal(){
@@ -175,24 +164,24 @@ void generatePWM(unsigned int countTo){
 	switch(output){
 
 	case 1:
-	if(PWMTimerCnt >= countTo){
-		//switch port
-		output = 0;
-		PWMTimerCnt = 0;
-		putCharDebug('p');
-		PORTB = 0b00000000;
-	}
-	break; //end case 1
+		if(PWMTimerCnt >= countTo){
+			//switch port
+			output = 0;
+			PWMTimerCnt = 0;
+			putCharDebug('p');
+			PORTB = 0b00000000;
+		}
+		break; //end case 1
 
 	case 0:
-	if(PWMTimerCnt >= countTo){
-		//switch port
-		output = 1;
-		PWMTimerCnt = 0;
-		putCharDebug('s');
-		PORTB = 0b00000010;
-	}
-	break; //end case 0
+		if(PWMTimerCnt >= countTo){
+			//switch port
+			output = 1;
+			PWMTimerCnt = 0;
+			putCharDebug('s');
+			PORTB = 0b00000010;
+		}
+		break; //end case 0
 	}
 }
 
@@ -217,5 +206,53 @@ void outputPWM(){
 		generatePWM(Thigh);
 		break;
 	}
+}
+
+void ramp(){
+	if((DAC_VALUE_A < 2047) && rampFlag == 0){
+		DAC_VALUE_A++ ;
+		DAC_VALUE_B-- ;
+	} else if ((DAC_VALUE_A >= 2047) && rampFlag == 0){
+		DAC_VALUE_A-- ;
+		DAC_VALUE_B++ ;
+		rampFlag = 1;
+	} else if ((DAC_VALUE_A <= 0) && rampFlag == 1){
+		DAC_VALUE_A++ ;
+		DAC_VALUE_B-- ;
+		rampFlag = 0;
+	} else if ((DAC_VALUE_A < 2047) && rampFlag == 1){
+		DAC_VALUE_A-- ;
+		DAC_VALUE_B++ ;
+	}
+}
+
+void DACsend(){
+	BYTE byteA = NULL;
+	BYTE byteB = NULL;
+	BYTE byteC = NULL;
+
+	//Write to DAC A
+	byteA = (WRITE_MODE << 4) | (ADDRESS_A);
+	byteB = DAC_VALUE_A >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
+	byteC = DAC_VALUE_A << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
+
+	//Write to DAC B
+	byteA = (WRITE_MODE << 4) | (ADDRESS_B);
+	byteB = DAC_VALUE_B >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
+	byteC = DAC_VALUE_B << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
+
+	//Update both DACs
+	byteA = (UPDATE_MODE << 4) | (ADDRESS_ALL);
+	byteB = 0;
+	byteC = 0;
+	spiTransceive(byteA);
+	spiTransceive(byteB);
+	spiTransceive(byteC);
 }
 
