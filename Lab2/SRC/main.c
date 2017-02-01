@@ -5,12 +5,16 @@
  *      Author: nbeeten
  */
 #include "main.h"
+//#include "globals.h"
 
-#define PART1 0
-#define PART2 1
-#define PART3 2
+#define PRINT_POT 0
+#define TRIANGLE_WAVE 1
+#define ARM_DRIVE 2
+#define CURRENT_SENSE 3
+#define PID_CONTROL 4
+#define ARM_POSITION 5
 
-#define MODE PART1
+#define MODE TRIANGLE_WAVE
 
 /////BIT MASKS FOR DAC/////
 #define WRITE_MODE 0b0000
@@ -30,7 +34,7 @@ int main(){
 
 	switch(MODE){
 
-	case PART1:
+	case PRINT_POT:
 		//print command to tell user what to do
 		printf("%s", "  Press any letter to start recording data  ");
 
@@ -42,28 +46,23 @@ int main(){
 				printPotVal();
 			}
 		}
-		break; //end of case PART1
+		break; //end of case PRINT_POT
 
-	case PART2:
-		//inits the buttons on PORTB
-		initButtons();
-		//init PWM ports
-		initPWMPin();
+	case TRIANGLE_WAVE:
 		//print command to tell user what to do
 		printf("%s", "  Press any letter to start recording data  ");
 		while(getCharDebug() != 0x00){
-			//start timer 0 at CTC and comp 1
-			initTimer(0, 1, 1);
+			////start timer 1 (numbers don't currently mean anything...awk...)
+			initTimer(1, 1, 1);
 			while(1){
-				//checkButtons();
-				outputPWM();
-				//prints values needed for part 2
-				//printPWMVal();
+				ramp();
+				setDAC(1, DAC_VALUE_A);
+				setDAC(2, DAC_VALUE_B);
 			}
 		}
-		break;//end of case PART2
+		break; //end of case TRIANGLE_WAVE
 
-	case PART3:
+	case ARM_DRIVE:
 		//inits the buttons on PORTB
 		initButtons();
 		//init PWM ports
@@ -83,8 +82,19 @@ int main(){
 				printPWMVal();
 			}
 		}
-		break;//end of case PART3
+		break; //end of case ARM_DRIVE
 
+	case CURRENT_SENSE:
+
+		break; //end of case CURRENT_SENSE
+
+	case PID_CONTROL:
+
+		break; //end of case PID_CONTROL
+
+	case ARM_POSITION:
+
+		break; //end of case ARM_POSITION
 	}
 
 }
@@ -226,33 +236,4 @@ void ramp(){
 	}
 }
 
-void DACsend(){
-	BYTE byteA = NULL;
-	BYTE byteB = NULL;
-	BYTE byteC = NULL;
-
-	//Write to DAC A
-	byteA = (WRITE_MODE << 4) | (ADDRESS_A);
-	byteB = DAC_VALUE_A >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
-	byteC = DAC_VALUE_A << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
-	spiTransceive(byteA);
-	spiTransceive(byteB);
-	spiTransceive(byteC);
-
-	//Write to DAC B
-	byteA = (WRITE_MODE << 4) | (ADDRESS_B);
-	byteB = DAC_VALUE_B >> 2; //shift the 10 bit dac value over 2 to fit into the 8 bit register
-	byteC = DAC_VALUE_B << 6; //shift the 10 bit dac value over 6 to send the last 2 bits
-	spiTransceive(byteA);
-	spiTransceive(byteB);
-	spiTransceive(byteC);
-
-	//Update both DACs
-	byteA = (UPDATE_MODE << 4) | (ADDRESS_ALL);
-	byteB = 0;
-	byteC = 0;
-	spiTransceive(byteA);
-	spiTransceive(byteB);
-	spiTransceive(byteC);
-}
 
