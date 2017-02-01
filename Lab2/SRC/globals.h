@@ -8,8 +8,6 @@
 #ifndef SRC_GLOBALS_H_
 #define SRC_GLOBALS_H_
 
-#include "main.h"
-
 volatile unsigned int ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;

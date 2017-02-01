@@ -6,6 +6,8 @@
  */
 
 #include "main.h"
+#include "RBELib/RBELib.h"
+
 
 /**
  * @brief Initializes the SPI bus for communication with all of your

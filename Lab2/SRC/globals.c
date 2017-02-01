@@ -5,8 +5,8 @@
  *      Author: nbeeten
  */
 
-#include "main.h"
-
+//#include "main.h"
+#include "globals.h"
 void initGlobals(){
 
 	ADCvalue = 0;
