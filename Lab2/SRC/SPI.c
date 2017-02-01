@@ -18,10 +18,15 @@
  * of your SS lines!
  */
 void initSPI(){
-	/* Set MOSI and SCK output, all others input */
-	DDRB = (1<<DDB6)|(1<<DDB7);
-	/* Enable SPI, Master, set clock rate fck/16 */
-	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+	PRR = 0;
+
+	DDRB |= (1 << DDB5) | (1 << DDB7) | (1 << DDB4);
+
+	PORTB |= (1 << PB4);
+
+	DDRB &= ~(1 << DDB6);
+
+	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0);
 }
 
 /**
@@ -40,15 +45,15 @@ void initSPI(){
 unsigned char spiTransceive(BYTE data){
 	/* Start transmission */
 	///////////READ/////////
-	BYTE dataIn = NULL;
-	while(!(SPSR & (1<<SPIF)))
-		;
+	unsigned char dataIn = 0;
+//	while(!(SPSR & (1<<SPIF))) //this breaks things
+//		;
 	dataIn = SPDR;
 	///////////WRITE////////
 	SPDR = data;
 	/* Wait for transmission complete */
-	while(!(SPSR & (1<<SPIF)))
-			;
+	while(!(SPSR & (1<<SPIF))){}
+
 	return dataIn;
 }
 
