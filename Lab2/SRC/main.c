@@ -5,25 +5,37 @@
  *      Author: nbeeten
  */
 #include "main.h"
+#include "RBELib/RBELib.h"
+//#include "globals.h"
 
-#define PART1 0
-#define PART2 1
-#define PART3 2
+#define PRINT_POT 0
+#define TRIANGLE_WAVE 1
+#define ARM_DRIVE 2
+#define CURRENT_SENSE 3
+#define PID_CONTROL 4
+#define ARM_POSITION 5
 
-#define MODE PART2
+#define MODE TRIANGLE_WAVE
+
+/////BIT MASKS FOR DAC/////
+#define WRITE_MODE 0b0000
+#define UPDATE_MODE 0b0001
+#define ADDRESS_A 0b0001
+#define ADDRESS_B 0b0010
+#define ADDRESS_ALL 0b1111
 
 int main(){
-	//start USART at buad rate of 115200
+	//start USART at baud rate of 115200
 	initRBELib();
 	initGlobals();
 	debugUSARTInit(115200);
 
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
-	freeRunADC(ADC_CHANNEL);
+	freeRunADC(DBUS0_CHANNEL);
 
 	switch(MODE){
 
-	case PART1:
+	case PRINT_POT:
 		//print command to tell user what to do
 		printf("%s", "  Press any letter to start recording data  ");
 
@@ -35,28 +47,22 @@ int main(){
 				printPotVal();
 			}
 		}
-		break; //end of case PART1
+		break; //end of case PRINT_POT
 
-	case PART2:
-		//inits the buttons on PORTB
-		initButtons();
-		//init PWM ports
-		initPWMPin();
+	case TRIANGLE_WAVE:
 		//print command to tell user what to do
-		printf("%s", "  Press any letter to start recording data  ");
-		while(getCharDebug() != 0x00){
-			//start timer 0 at CTC and comp 1
-			initTimer(0, 1, 1);
-			while(1){
-				//checkButtons();
-				outputPWM();
-				//prints values needed for part 2
-				//printPWMVal();
-			}
+		printf("%s", "  starting  ");
+		////start timer 1 (numbers don't currently mean anything...awk...)
+		initTimer(1, 1, 1);
+		initSPI();
+		while(1){
+			//ramp();
+			setDAC(1, 1000);
+			//setDAC(2, 0);
 		}
-		break;//end of case PART2
+		break; //end of case TRIANGLE_WAVE
 
-	case PART3:
+	case ARM_DRIVE:
 		//inits the buttons on PORTB
 		initButtons();
 		//init PWM ports
@@ -76,8 +82,19 @@ int main(){
 				printPWMVal();
 			}
 		}
-		break;//end of case PART3
+		break; //end of case ARM_DRIVE
 
+	case CURRENT_SENSE:
+
+		break; //end of case CURRENT_SENSE
+
+	case PID_CONTROL:
+
+		break; //end of case PID_CONTROL
+
+	case ARM_POSITION:
+
+		break; //end of case ARM_POSITION
 	}
 
 }
@@ -86,25 +103,7 @@ int returnBITS(){
 	return ADMUX;
 }
 
-/**
- * @brief converts the 10 bit adc value to the pot angle
- *
- * @param potVal the 10 bit adc output
- * @return the Angle of the potentiometer
- */
-double ADCtoAngle(unsigned int potVal){
-	return ((double) potVal)/MAX_ADC*270;
-}
 
-/**
- * @brief converts the 10 bit adc value from the pot to the voltage through the pot in mV
- *
- * @param potVal the 10 bit adc output
- * @return the voltage across the potentiometer in mV
- */
-double ADCtoMiliV(unsigned int potVal){
-	return ((double) potVal)/MAX_ADC*5000;
-}
 
 /**
  * @brief prints the time stamp, pot value, pot angle, pot milivolts
@@ -118,7 +117,7 @@ void printPotVal(){
 	potmV = ADCtoMiliV(ADCvalue);
 	timeVal = timerCnt * 0.5;
 
-	printf("%f, %d, %f, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
+	printf("%f, %d, %g, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
 }
 
 void printPWMVal(){
@@ -175,24 +174,24 @@ void generatePWM(unsigned int countTo){
 	switch(output){
 
 	case 1:
-	if(PWMTimerCnt >= countTo){
-		//switch port
-		output = 0;
-		PWMTimerCnt = 0;
-		putCharDebug('p');
-		PORTB = 0b00000000;
-	}
-	break; //end case 1
+		if(PWMTimerCnt >= countTo){
+			//switch port
+			output = 0;
+			PWMTimerCnt = 0;
+			putCharDebug('p');
+			PORTB = 0b00000000;
+		}
+		break; //end case 1
 
 	case 0:
-	if(PWMTimerCnt >= countTo){
-		//switch port
-		output = 1;
-		PWMTimerCnt = 0;
-		putCharDebug('s');
-		PORTB = 0b00000010;
-	}
-	break; //end case 0
+		if(PWMTimerCnt >= countTo){
+			//switch port
+			output = 1;
+			PWMTimerCnt = 0;
+			putCharDebug('s');
+			PORTB = 0b00000010;
+		}
+		break; //end case 0
 	}
 }
 
@@ -218,4 +217,23 @@ void outputPWM(){
 		break;
 	}
 }
+
+void ramp(){
+	if((DAC_VALUE_A < 2047) && rampFlag == 0){
+		DAC_VALUE_A++ ;
+		DAC_VALUE_B-- ;
+	} else if ((DAC_VALUE_A >= 2047) && rampFlag == 0){
+		DAC_VALUE_A-- ;
+		DAC_VALUE_B++ ;
+		rampFlag = 1;
+	} else if ((DAC_VALUE_A <= 0) && rampFlag == 1){
+		DAC_VALUE_A++ ;
+		DAC_VALUE_B-- ;
+		rampFlag = 0;
+	} else if ((DAC_VALUE_A < 2047) && rampFlag == 1){
+		DAC_VALUE_A-- ;
+		DAC_VALUE_B++ ;
+	}
+}
+
 
