@@ -22,4 +22,8 @@ int rampFlag;
 short button;
 double ADC_90, ADC_0;
 
+//PID
+unsigned int errorH;
+unsigned int errorL;
+
 #endif /* SRC_GLOBALS_H_ */

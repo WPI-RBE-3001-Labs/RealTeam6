@@ -30,6 +30,11 @@ int main(){
 	initGlobals();
 	debugUSARTInit(115200);
 
+	//initialize the DACValues
+	DAC_VALUE_A = 0;
+	DAC_VALUE_B = 4095;
+	rampFlag = 0;
+
 	//sets the ADC to Free Run Mode on the ADC Channel chosen
 	freeRunADC(DBUS0_CHANNEL);
 
@@ -40,7 +45,7 @@ int main(){
 		printf("%s", "  Press any letter to start recording data  ");
 
 		while(getCharDebug() != 0x00){
-			//start timer 1 (numbers don't currently mean anything...awk...)
+			//start timer 1 (rest numbers don't currently mean anything...awk...)
 			initTimer(1, 1, 1);
 			while(1){
 				//prints pot values needed for part 1
@@ -53,12 +58,16 @@ int main(){
 		//print command to tell user what to do
 		printf("%s", "  starting  ");
 		////start timer 1 (numbers don't currently mean anything...awk...)
-		initTimer(1, 1, 1);
+		initTimer(0, 1, 1);
 		initSPI();
 		while(1){
-			//ramp();
-			setDAC(1, 1000);
-			//setDAC(2, 0);
+			ramp();
+
+			setDAC(1, DAC_VALUE_A);
+
+			setDAC(2, DAC_VALUE_B);
+
+
 		}
 		break; //end of case TRIANGLE_WAVE
 
@@ -219,20 +228,20 @@ void outputPWM(){
 }
 
 void ramp(){
-	if((DAC_VALUE_A < 2047) && rampFlag == 0){
+	if((DAC_VALUE_A < 4095) && rampFlag == 0){
 		DAC_VALUE_A++ ;
 		DAC_VALUE_B-- ;
-	} else if ((DAC_VALUE_A >= 2047) && rampFlag == 0){
+	} else if ((DAC_VALUE_A >= 4095) && rampFlag == 0){
 		DAC_VALUE_A-- ;
 		DAC_VALUE_B++ ;
 		rampFlag = 1;
-	} else if ((DAC_VALUE_A <= 0) && rampFlag == 1){
+	} else if ((DAC_VALUE_A > 0) && rampFlag == 1){
+		DAC_VALUE_A-- ;
+		DAC_VALUE_B++ ;
+	}else if ((DAC_VALUE_A <= 0) && rampFlag == 1){
 		DAC_VALUE_A++ ;
 		DAC_VALUE_B-- ;
 		rampFlag = 0;
-	} else if ((DAC_VALUE_A < 2047) && rampFlag == 1){
-		DAC_VALUE_A-- ;
-		DAC_VALUE_B++ ;
 	}
 }
 

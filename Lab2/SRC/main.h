@@ -28,6 +28,7 @@ void initButtons();
 void initPWMPin();
 void generatePWM(unsigned int countTo);
 void outputPWM();
+void ramp();
 
 
 #endif /* SRC_MAIN_H_ */
