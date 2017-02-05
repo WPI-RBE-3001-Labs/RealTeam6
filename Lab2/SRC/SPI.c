@@ -31,6 +31,11 @@ void initSPI(){
 	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
 
 	SPSR &= ~(1 << SPI2X);
+
+
+//	spiTransceive(0b01101111);
+//	spiTransceive(0);
+//	spiTransceive(0);
 }
 
 /**

@@ -4,7 +4,8 @@
  *  Created on: Feb 4, 2017
  *      Author: nbeeten
  */
-#include "main.h"
+#include "RBELib/RBELib.h"
+#include "globals.h"
 
 
 /**
@@ -17,6 +18,9 @@
  * @param Kd Derivative value.
  *
  * @todo Create a function to the the PID constants for a given link.
+ */
+
+pidConst pidConsts;
 
 void setConst(char link, float Kp, float Ki, float Kd){
 	if (link == 'H'){
@@ -37,12 +41,31 @@ void setConst(char link, float Kp, float Ki, float Kd){
  * @param actPos The current position of the link.
  *
  * @todo Make a function to calculate the PID value for a link.
-
+ */
 signed int calcPID(char link, int setPoint, int actPos){
-	float error = setPoint - actPos;
+	int error = setPoint - actPos;
+	float pTerm, iTerm, dTerm;
+
+	if(link == 'H'){
+
+		errorH = error + errorH;
+		pTerm = pidConsts.Kp_H * error;
+		iTerm = pidConsts.Ki_H * errorH;
+		dTerm = pidConsts.Kd_H * preErrorH - error;
+
+		preErrorH = error;
+
+	} else {
+		errorL= error + errorL;
+		pTerm = pidConsts.Kp_L * error;
+		iTerm = pidConsts.Ki_L * errorL;
+		dTerm = pidConsts.Kd_L * preErrorL - error;
+
+		preErrorL = error;
+
+	}
 
 
+	return pTerm + iTerm + dTerm;
 
-
-
-}*/
+}

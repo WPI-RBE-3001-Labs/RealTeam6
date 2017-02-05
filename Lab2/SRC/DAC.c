@@ -21,6 +21,7 @@ void setDAC(int DACn, int SPIval){
 
   //If value is over our max, cap it at 4095
   if(SPIval >= 4096) SPIval = 4095;
+  if(SPIval <= 0) SPIval = 0;
   temp = 0;
   //Copy the SPIval
   temp = SPIval;
@@ -49,5 +50,9 @@ void setDAC(int DACn, int SPIval){
   spiTransceive(package2);
   spiTransceive(package3);
 
-  //DAC_SS = 1;
+  DAC_SS = 1;
+
+  //Toggle the SS line to load and execute
+   DAC_SS = 1;
+   DAC_SS = 0;
 }

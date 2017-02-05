@@ -12,6 +12,7 @@
 #include "globals.h"
 #include "freerunADC.h"
 #include "ADCcalc.h"
+#include "currentSense.h"
 
 #define MAX_ADC 1023
 #define ADC_CHANNEL 4

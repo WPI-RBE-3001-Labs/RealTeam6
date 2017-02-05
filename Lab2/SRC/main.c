@@ -15,7 +15,7 @@
 #define PID_CONTROL 4
 #define ARM_POSITION 5
 
-#define MODE TRIANGLE_WAVE
+#define MODE ARM_DRIVE
 
 /////BIT MASKS FOR DAC/////
 #define WRITE_MODE 0b0000
@@ -58,43 +58,38 @@ int main(){
 		//print command to tell user what to do
 		printf("%s", "  starting  ");
 		////start timer 1 (numbers don't currently mean anything...awk...)
-		initTimer(0, 1, 1);
+		initTimer(1, 1, 1);
 		initSPI();
 		while(1){
 			ramp();
 
 			setDAC(1, DAC_VALUE_A);
-
 			setDAC(2, DAC_VALUE_B);
-
+			printf("Value A: %d, Value B: %d\n\r", DAC_VALUE_A, DAC_VALUE_B);
 
 		}
 		break; //end of case TRIANGLE_WAVE
 
 	case ARM_DRIVE:
-		//inits the buttons on PORTB
-		initButtons();
-		//init PWM ports
-		initPWMPin();
-		putCharDebug('p');
-		//print command to tell user what to do
-		printf("%s", "  Press any letter to start recording data  ");
-		putCharDebug('p');
-		while(getCharDebug() != 0x00){
-			putCharDebug('p');
-			//start timer 1 (numbers don't currently mean anything...awk...)
-			initTimer(0, 1, 1);
-			putCharDebug('p');
-			while(1){
-
-				//prints pot values needed for part 1
-				printPWMVal();
-			}
+		initTimer(1, 1, 1);
+		initSPI();
+		while(1){
+			driveLink(0, 1);
+			_delay_ms(200);
+			driveLink(0, 0);
+			_delay_ms(200);
 		}
 		break; //end of case ARM_DRIVE
 
 	case CURRENT_SENSE:
-
+		initCurrent(0);
+		while(1){
+			driveLink(0, 1);
+			_delay_ms(200);
+			driveLink(0, 0);
+			_delay_ms(200);
+			printf("Current 0: %f\n\r",(double) readCurrent(0));
+		}
 		break; //end of case CURRENT_SENSE
 
 	case PID_CONTROL:
@@ -229,18 +224,18 @@ void outputPWM(){
 
 void ramp(){
 	if((DAC_VALUE_A < 4095) && rampFlag == 0){
-		DAC_VALUE_A++ ;
-		DAC_VALUE_B-- ;
+		DAC_VALUE_A += 40 ;
+		DAC_VALUE_B -= 40 ;
 	} else if ((DAC_VALUE_A >= 4095) && rampFlag == 0){
-		DAC_VALUE_A-- ;
-		DAC_VALUE_B++ ;
+		DAC_VALUE_A -= 40 ;
+		DAC_VALUE_B += 40 ;
 		rampFlag = 1;
 	} else if ((DAC_VALUE_A > 0) && rampFlag == 1){
-		DAC_VALUE_A-- ;
-		DAC_VALUE_B++ ;
+		DAC_VALUE_A -= 40 ;
+		DAC_VALUE_B += 40 ;
 	}else if ((DAC_VALUE_A <= 0) && rampFlag == 1){
-		DAC_VALUE_A++ ;
-		DAC_VALUE_B-- ;
+		DAC_VALUE_A += 40 ;
+		DAC_VALUE_B -= 40 ;
 		rampFlag = 0;
 	}
 }

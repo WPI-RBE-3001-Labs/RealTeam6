@@ -11,6 +11,7 @@
 volatile unsigned int ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;
+unsigned int lastCnt;
 unsigned long PWMTimerCnt;
 double timeVal;
 volatile unsigned long int interrupt;
@@ -25,5 +26,8 @@ double ADC_90, ADC_0;
 //PID
 unsigned int errorH;
 unsigned int errorL;
+unsigned int preErrorH;
+unsigned int preErrorL;
+
 
 #endif /* SRC_GLOBALS_H_ */
