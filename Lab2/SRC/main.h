@@ -13,6 +13,7 @@
 #include "freerunADC.h"
 #include "ADCcalc.h"
 #include "currentSense.h"
+#include "PIDmotors.h"
 
 #define MAX_ADC 1023
 #define ADC_CHANNEL 4

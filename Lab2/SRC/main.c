@@ -121,10 +121,11 @@ int main(){
 			pidH = calcPID('H', 60, ADCtoAngle(ADCValues[3]) );
 
 			if(errorH > 0){
-				driveLink(1, 1);
+				driveLinkPID(1, 1, pidH);
 			}else if (errorH < 0){
-				driveLink(1, 0);
+				driveLinkPID(1, 0, pidH);
 			}
+
 		}
 
 		break; //end of case PID_CONTROL

@@ -44,7 +44,7 @@ void setConst(char link, float Kp, float Ki, float Kd){
  */
 signed int calcPID(char link, int setPoint, int actPos){
 	int error = setPoint - actPos;
-	float pTerm, iTerm, dTerm, ffTerm;
+	float pTerm, iTerm, dTerm;
 
 	if(link == 'H'){
 

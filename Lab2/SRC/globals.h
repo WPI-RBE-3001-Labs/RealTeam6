@@ -36,5 +36,6 @@ volatile short ADCValues[8];
 
 volatile double pidConstants[8];
 
+void initGlobals();
 
 #endif /* SRC_GLOBALS_H_ */
