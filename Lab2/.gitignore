@@ -1,2 +1,3 @@
 #ignore everything in /Release
 /Release/*
+/Release/SRC/*
