@@ -29,5 +29,12 @@ unsigned int errorL;
 unsigned int preErrorH;
 unsigned int preErrorL;
 
+unsigned int pidH;
+unsigned int pidL;
+
+volatile short ADCValues[8];
+
+volatile double pidConstants[8];
+
 
 #endif /* SRC_GLOBALS_H_ */

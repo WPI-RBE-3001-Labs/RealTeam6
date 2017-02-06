@@ -44,7 +44,7 @@ void setConst(char link, float Kp, float Ki, float Kd){
  */
 signed int calcPID(char link, int setPoint, int actPos){
 	int error = setPoint - actPos;
-	float pTerm, iTerm, dTerm;
+	float pTerm, iTerm, dTerm, ffTerm;
 
 	if(link == 'H'){
 
@@ -52,6 +52,7 @@ signed int calcPID(char link, int setPoint, int actPos){
 		pTerm = pidConsts.Kp_H * error;
 		iTerm = pidConsts.Ki_H * errorH;
 		dTerm = pidConsts.Kd_H * preErrorH - error;
+
 
 		preErrorH = error;
 
@@ -61,11 +62,12 @@ signed int calcPID(char link, int setPoint, int actPos){
 		iTerm = pidConsts.Ki_L * errorL;
 		dTerm = pidConsts.Kd_L * preErrorL - error;
 
+
 		preErrorL = error;
 
 	}
 
 
-	return pTerm + iTerm + dTerm;
+	return pTerm + iTerm + dTerm ;
 
 }

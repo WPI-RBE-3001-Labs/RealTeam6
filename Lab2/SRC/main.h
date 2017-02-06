@@ -20,6 +20,7 @@
 #define DBUS1_CHANNEL 3
 
 
+
 double ADCtoMiliV(unsigned int potVal);
 void printPotVal();
 void printPWMVal();
@@ -30,6 +31,7 @@ void initPWMPin();
 void generatePWM(unsigned int countTo);
 void outputPWM();
 void ramp();
+void PIDCntrl();
 
 
 #endif /* SRC_MAIN_H_ */

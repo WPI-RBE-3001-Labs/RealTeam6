@@ -12,7 +12,10 @@
  * @todo Create way to stop the motors using the DAC.
  */
 void stopMotors(){
-
+	setDAC(0, 0);
+	setDAC(1, 0);
+	setDAC(2, 0);
+	setDAC(3, 0);
 }
 
 /**

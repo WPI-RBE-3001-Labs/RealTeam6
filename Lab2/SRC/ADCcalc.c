@@ -28,3 +28,8 @@ double ADCtoMiliV(unsigned int potVal){
 double ADCtoAngle(unsigned int potVal){
 	return ((double) potVal-ADC_0)*(90/(ADC_90-ADC_0));
 }
+
+
+double ADCtoHundred(unsigned int potVal){
+	return ((double) potVal)/MAX_ADC*100;
+}
