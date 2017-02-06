@@ -43,7 +43,7 @@ ISR(ADC_vect){
 	  * called ADCValues
 	  */
 	//selects the current channel selected in the ADC
-	char currentChannel = ADMUX & 0b0001111;
+	int currentChannel = ADMUX & 0b0001111;
 
 	if(currentChannel < 7){
 		ADCValues[currentChannel] = getADC(currentChannel);

@@ -48,19 +48,19 @@ signed int calcPID(char link, int setPoint, int actPos){
 
 	if(link == 'H'){
 
-		errorH = error + errorH;
+		errorH = errorH + error;
 		pTerm = pidConsts.Kp_H * error;
 		iTerm = pidConsts.Ki_H * errorH;
-		dTerm = pidConsts.Kd_H * preErrorH - error;
+		dTerm = pidConsts.Kd_H * (preErrorH - error);
 
 
 		preErrorH = error;
 
 	} else {
-		errorL= error + errorL;
+		errorL= errorL + error;
 		pTerm = pidConsts.Kp_L * error;
 		iTerm = pidConsts.Ki_L * errorL;
-		dTerm = pidConsts.Kd_L * preErrorL - error;
+		dTerm = pidConsts.Kd_L * (preErrorL - error);
 
 
 		preErrorL = error;
