@@ -7,6 +7,10 @@
 
 #include "main.h"
 
+/*
+ * @brief Stops the selected link from rotating
+ * @param link The link you want to set the values for (1 for H or 0 for L).
+ */
 void stopSelect(int link){
 
 	switch (link){
@@ -24,6 +28,12 @@ void stopSelect(int link){
 
 }
 
+/*
+ * @brief Drives the selected link in the desired direction at the desired speed
+ * @param link The link you want to set the values for (1 for H or 0 for L).
+ * @param dir The direction you want the link to rotate (0 or 1).
+ * @param pwr The the power that you want to drive the motor at.
+ */
 void driveLinkPID(int link, int dir, int pwr){
 	switch (link){
 	case 0: //lower link

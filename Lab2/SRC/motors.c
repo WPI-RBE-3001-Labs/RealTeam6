@@ -9,7 +9,6 @@
 /**
  * @brief Helper function to stop the motors on the arm.
  *
- * @todo Create way to stop the motors using the DAC.
  */
 void stopMotors(){
 	setDAC(0, 0);
@@ -48,7 +47,6 @@ void gotoXY(int x, int y){
  * @param link Which link to control.
  * @param dir Which way to drive the link.
  *
- * @todo Create a way to drive either link in any direction.
  */
 void driveLink(int link, int dir){
 	switch (link){

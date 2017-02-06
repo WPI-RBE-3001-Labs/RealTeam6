@@ -17,7 +17,6 @@
  * @param Ki Integral value.
  * @param Kd Derivative value.
  *
- * @todo Create a function to the the PID constants for a given link.
  */
 
 pidConst pidConsts;
@@ -40,7 +39,6 @@ void setConst(char link, float Kp, float Ki, float Kd){
  * @param setPoint The desired position of the link.
  * @param actPos The current position of the link.
  *
- * @todo Make a function to calculate the PID value for a link.
  */
 signed int calcPID(char link, int setPoint, int actPos){
 	int error = setPoint - actPos;
