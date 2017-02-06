@@ -11,6 +11,7 @@
 volatile unsigned int ADCvalue;
 volatile int ADCValAvailable;
 unsigned long timerCnt;
+unsigned int lastCnt;
 unsigned long PWMTimerCnt;
 double timeVal;
 volatile unsigned long int interrupt;
@@ -21,5 +22,20 @@ int output;
 int rampFlag;
 short button;
 double ADC_90, ADC_0;
+
+//PID
+unsigned int errorH;
+unsigned int errorL;
+unsigned int preErrorH;
+unsigned int preErrorL;
+
+unsigned int pidH;
+unsigned int pidL;
+
+volatile short ADCValues[8];
+
+volatile double pidConstants[8];
+
+void initGlobals();
 
 #endif /* SRC_GLOBALS_H_ */

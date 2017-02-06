@@ -24,4 +24,12 @@ void initGlobals(){
 	DAC_VALUE_B = 2047;
 	rampFlag = 0;
 
+
+
+	//PID
+	preErrorH = 0;
+	preErrorL = 0;
+	errorH = 0;
+	errorL = 0;
+
 }

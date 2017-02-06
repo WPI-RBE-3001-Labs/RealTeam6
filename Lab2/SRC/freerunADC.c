@@ -27,7 +27,6 @@ void freeRunADC(int channel){
 	//sets ADC_ADIE to 1 which enables interrupts
 	ADCSRA |= 0b10101000;
 
-
 	//starts the first conversion
 	ADCSRA |= 0b01000000;
 
@@ -38,6 +37,22 @@ void freeRunADC(int channel){
 
 ISR(ADC_vect){
 	interrupt += 1;
+
+	 /**
+	  * gets all the values of all the channels of the ADC and stores them in an array
+	  * called ADCValues
+	  */
+	//selects the current channel selected in the ADC
+	char currentChannel = ADMUX & 0b0001111;
+
+	if(currentChannel < 7){
+		ADCValues[currentChannel] = getADC(currentChannel);
+		currentChannel++;
+	} else if (currentChannel == 7){
+		ADCValues[currentChannel] = getADC(currentChannel);
+		currentChannel = 0;
+	}
+    /*
 	//sets the global variable to be the value of the ADC (I think is that variable)
 	if(ADMUX & 0b00100000){ //ADC result is left shifted
 		ADCvalue = ((ADCL >> 6)|0b11);
@@ -47,6 +62,7 @@ ISR(ADC_vect){
 	}
 	//tell that the ADC has value
 	ADCValAvailable = 1;
+	*/
 }
 
 //@todo set a new isr for timer2 for the later part of the lba at the right frequency,
