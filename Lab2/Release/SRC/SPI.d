@@ -33,7 +33,8 @@ SRC/SPI.d SRC/SPI.o: ../SRC/SPI.c ../SRC/main.h \
   C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SetServo.h \
   C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SlaveSelects.h \
   ../SRC/globals.h ../SRC/freerunADC.h ../SRC/ADCcalc.h \
-  ../SRC/currentSense.h ../SRC/PIDmotors.h
+  ../SRC/currentSense.h ../SRC/PIDmotors.h ../SRC/printStatements.h \
+  ../SRC/buttons.h ../SRC/pwm.h
 
 ../SRC/main.h:
 
@@ -112,3 +113,9 @@ C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SlaveSelects.h:
 ../SRC/currentSense.h:
 
 ../SRC/PIDmotors.h:
+
+../SRC/printStatements.h:
+
+../SRC/buttons.h:
+
+../SRC/pwm.h:

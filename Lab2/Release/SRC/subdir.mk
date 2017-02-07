@@ -8,14 +8,18 @@ C_SRCS += \
 ../SRC/ADCcalc.c \
 ../SRC/DAC.c \
 ../SRC/PID.c \
+../SRC/PIDmotors.c \
 ../SRC/SPI.c \
 ../SRC/USART.c \
+../SRC/buttons.c \
 ../SRC/currentSense.c \
 ../SRC/freerunADC.c \
 ../SRC/globals.c \
 ../SRC/main.c \
 ../SRC/motors.c \
 ../SRC/ports.c \
+../SRC/printStatements.c \
+../SRC/pwm.c \
 ../SRC/timer.c 
 
 OBJS += \
@@ -23,14 +27,18 @@ OBJS += \
 ./SRC/ADCcalc.o \
 ./SRC/DAC.o \
 ./SRC/PID.o \
+./SRC/PIDmotors.o \
 ./SRC/SPI.o \
 ./SRC/USART.o \
+./SRC/buttons.o \
 ./SRC/currentSense.o \
 ./SRC/freerunADC.o \
 ./SRC/globals.o \
 ./SRC/main.o \
 ./SRC/motors.o \
 ./SRC/ports.o \
+./SRC/printStatements.o \
+./SRC/pwm.o \
 ./SRC/timer.o 
 
 C_DEPS += \
@@ -38,14 +46,18 @@ C_DEPS += \
 ./SRC/ADCcalc.d \
 ./SRC/DAC.d \
 ./SRC/PID.d \
+./SRC/PIDmotors.d \
 ./SRC/SPI.d \
 ./SRC/USART.d \
+./SRC/buttons.d \
 ./SRC/currentSense.d \
 ./SRC/freerunADC.d \
 ./SRC/globals.d \
 ./SRC/main.d \
 ./SRC/motors.d \
 ./SRC/ports.d \
+./SRC/printStatements.d \
+./SRC/pwm.d \
 ./SRC/timer.d 
 
 

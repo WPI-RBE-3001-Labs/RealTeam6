@@ -20,7 +20,12 @@ unsigned int DAC_VALUE_A;
 unsigned int DAC_VALUE_B;
 int output;
 int rampFlag;
+int PIDFlag;
+int lastPIDFlag;
+
 short button;
+
+
 double ADC_90, ADC_0;
 
 //PID
@@ -32,9 +37,11 @@ unsigned int preErrorL;
 unsigned int pidH;
 unsigned int pidL;
 
-volatile short ADCValues[8];
+unsigned short ADCValues[8];
 
 volatile double pidConstants[8];
+
+int ADCCheckAllChannels;
 
 void initGlobals();
 

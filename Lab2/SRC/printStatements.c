@@ -17,7 +17,7 @@ void printPotVal(){
 	//save all values to things that can be used in a print function
 	potAngle = ADCtoAngle(ADCvalue);
 	potmV = ADCtoMiliV(ADCvalue);
-	timeVal = timerCnt * 0.5;
+	timeVal = timerCnt * 0.25;
 
 	printf("%f, %d, %g, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
 }

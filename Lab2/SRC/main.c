@@ -15,9 +15,7 @@
 #define PID_CONTROL 4
 #define ARM_POSITION 5
 
-#define MODE PID_CONTROL
-
-
+#define MODE TRIANGLE_WAVE
 
 
 /////BIT MASKS FOR DAC/////
@@ -26,6 +24,12 @@
 #define ADDRESS_A 0b0001
 #define ADDRESS_B 0b0010
 #define ADDRESS_ALL 0b1111
+
+#define LOWARMPOT 2
+#define HIGHARMPOT 3
+#define POT1 5
+#define POT2 6
+#define POT3 7
 
 int main(){
 	//start USART at baud rate of 115200
@@ -38,15 +42,10 @@ int main(){
 	DAC_VALUE_B = 4095;
 	rampFlag = 0;
 
-	//sets the ADC to Free Run Mode on the ADC Channel chosen
-	//freeRunADC(DBUS0_CHANNEL);
-
-	//test stuff
-	for(int i = 0; i <= 7; i++){
-		freeRunADC(i);
-	}
-
-
+	//inits the ADC for each Potentiometer
+	initADC(POT1);
+	initADC(POT2);
+	initADC(POT3);
 
 	switch(MODE){
 
@@ -107,7 +106,6 @@ int main(){
 	case PID_CONTROL:
 
 		while(1){
-
 			//@todo need to add feedforward to PID, shoudl just be a value added based off of gravity but im not sure how that works
 			//maybe we use the current sensor for that could be super wrong
 
@@ -116,25 +114,37 @@ int main(){
 			for(int i = 4; i <= 7; i++){
 				pidConstants[i] = ADCtoHundred(ADCValues[i]);
 			}
-			setConst('H', pidConstants[4], pidConstants[5], pidConstants[6]);
+			setConst('H', pidConstants[POT1], pidConstants[POT2], pidConstants[POT3]);
 			//3 is higher link *should probably check if i'm wrong here*
-			pidH = calcPID('H', 60, ADCtoAngle(ADCValues[3]) );
+			pidH = calcPID('H', 120, ADCtoAngle(ADCValues[HIGHARMPOT]) );
 
 			if(errorH > 0){
-				driveLinkPID(1, 1, pidH);
+				driveLinkPIDDir(1, 1, pidH);
 			}else if (errorH < 0){
-				driveLinkPID(1, 0, pidH);
+				driveLinkPIDDir(1, 0, pidH);
 			}
-
 		}
-
 		break; //end of case PID_CONTROL
 
 	case ARM_POSITION:
+			initTimer(1,0,1439);
 
+			while(1){
+				ADCValues[LOWARMPOT] = getADC(LOWARMPOT);
+				ADCValues[POT1] = getADC(POT1);
+				ADCValues[POT2] = getADC(POT2);
+				ADCValues[POT3] = getADC(POT3);
+				printf("Kp: %d, Ki: %d, Kd: %d, Low Arm Pot: %f\n\r", ADCValues[POT1], ADCValues[POT2], ADCValues[POT3], ADCtoAngle(ADCValues[LOWARMPOT]));
+				if (PIDFlag == 1){
+					setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
+					signed int Lpwr = calcPID('L',60,ADCtoAngle(ADCValues[LOWARMPOT]));
+					driveLinkPID(0,Lpwr);
+					stopSelect(1);
+					PIDFlag = 0;
+				}
+			}
 		break; //end of case ARM_POSITION
 	}
-
 } //end of main
 
 
