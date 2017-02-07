@@ -15,7 +15,7 @@
 #define PID_CONTROL 4
 #define ARM_POSITION 5
 
-#define MODE TRIANGLE_WAVE
+#define MODE PID_CONTROL
 
 
 /////BIT MASKS FOR DAC/////
@@ -93,18 +93,20 @@ int main(){
 		break; //end of case ARM_DRIVE
 
 	case CURRENT_SENSE:
+		initSPI();
 		initCurrent(0);
 		while(1){
 			driveLink(0, 1);
+			printf("Current 0: %f\n\r",(double) readCurrent(0));
 			_delay_ms(200);
 			driveLink(0, 0);
-			_delay_ms(200);
 			printf("Current 0: %f\n\r",(double) readCurrent(0));
+			_delay_ms(200);
 		}
 		break; //end of case CURRENT_SENSE
 
 	case PID_CONTROL:
-
+		initSPI();
 		while(1){
 			//@todo need to add feedforward to PID, shoudl just be a value added based off of gravity but im not sure how that works
 			//maybe we use the current sensor for that could be super wrong
@@ -112,38 +114,49 @@ int main(){
 			//the following array values come from the board as they are stored in sequence from the ADC
 			//4-7 is analog in from pots
 			for(int i = 4; i <= 7; i++){
-				pidConstants[i] = ADCtoHundred(ADCValues[i]);
+				pidConstants[i] = ADCtoHundred(getADC(i));
 			}
 			setConst('H', pidConstants[POT1], pidConstants[POT2], pidConstants[POT3]);
 			//3 is higher link *should probably check if i'm wrong here*
-			pidH = calcPID('H', 120, ADCtoAngle(ADCValues[HIGHARMPOT]) );
+			printf("     armpot: %f", ADCtoAngle(getADC(HIGHARMPOT)));
+			printf("     Kp: %f", pidConstants[POT1]);
+			pidH = calcPID('H', 90, ADCtoAngle(getADC(HIGHARMPOT)) );
+			//printf("pidH: %i\n\r", pidH);
+			printf("    pidh: %d", pidH);
 
+			driveLinkPIDDir(1, pidH);
+
+			/*
 			if(errorH > 0){
 				driveLinkPIDDir(1, 1, pidH);
 			}else if (errorH < 0){
 				driveLinkPIDDir(1, 0, pidH);
-			}
+			}*/
 		}
 		break; //end of case PID_CONTROL
 
 	case ARM_POSITION:
-			initTimer(1,0,1439);
+		initSPI();
+		initTimer(1,0,1439);
 
-			while(1){
+		while(1){
+			if (PIDFlag == 1){
 				ADCValues[LOWARMPOT] = getADC(LOWARMPOT);
 				ADCValues[POT1] = getADC(POT1);
 				ADCValues[POT2] = getADC(POT2);
 				ADCValues[POT3] = getADC(POT3);
+
+				setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
+				signed int Lpwr = calcPID('L',60,ADCtoAngle(ADCValues[LOWARMPOT]));
+
+				driveLinkPID(0,Lpwr);
+				stopSelect(1);
+
 				printf("Kp: %d, Ki: %d, Kd: %d, Low Arm Pot: %f\n\r", ADCValues[POT1], ADCValues[POT2], ADCValues[POT3], ADCtoAngle(ADCValues[LOWARMPOT]));
-				if (PIDFlag == 1){
-					setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
-					signed int Lpwr = calcPID('L',60,ADCtoAngle(ADCValues[LOWARMPOT]));
-					driveLinkPID(0,Lpwr);
-					stopSelect(1);
-					PIDFlag = 0;
-				}
+				PIDFlag = 0;
 			}
-		break; //end of case ARM_POSITION
+		}
+	break; //end of case ARM_POSITION
 	}
 } //end of main
 

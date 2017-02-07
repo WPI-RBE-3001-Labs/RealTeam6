@@ -21,7 +21,7 @@ void setDAC(int DACn, int SPIval){
 
   //If value is over our max, cap it at 4095
   if(SPIval >= 4096) SPIval = 4095;
-  if(SPIval <= 0) SPIval = 0;
+  //if(SPIval <= 0) SPIval = 0;
   temp = 0;
   //Copy the SPIval
   temp = SPIval;

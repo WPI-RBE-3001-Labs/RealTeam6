@@ -33,9 +33,11 @@ unsigned int errorH;
 unsigned int errorL;
 unsigned int preErrorH;
 unsigned int preErrorL;
+unsigned int actErrorH;
+unsigned int actErrorL;
 
-unsigned int pidH;
-unsigned int pidL;
+signed long pidH;
+signed long pidL;
 
 unsigned short ADCValues[8];
 

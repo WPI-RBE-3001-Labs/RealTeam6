@@ -69,22 +69,22 @@ void driveLinkPID(int link, int pwr){
  * @param dir The direction you want the link to rotate (0 or 1).
  * @param pwr The the power that you want to drive the motor at.
  */
-void driveLinkPIDDir(int link, int dir, int pwr){
+void driveLinkPIDDir(int link,  int pwr){
 	switch (link){
 	case 0: //lower link
-		if(dir){
+		if(pwr > 0){
 			setDAC(0, pwr);
 			setDAC(1, 0);
-		} else {
+		} else if(pwr < 0){
 			setDAC(0, 0);
 			setDAC(1, pwr);
 		}
 	break;
 	case 1: //high link
-		if(dir){
+		if( actErrorH > 0){
 			setDAC(2, pwr);
 			setDAC(3, 0);
-		} else {
+		} else if(actErrorH < 0){
 			setDAC(2, 0);
 			setDAC(3, pwr);
 		}

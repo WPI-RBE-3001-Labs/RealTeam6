@@ -41,27 +41,35 @@ void setConst(char link, float Kp, float Ki, float Kd){
  *
  */
 signed int calcPID(char link, int setPoint, int actPos){
-	int error = setPoint - actPos;
+
+
 	float pTerm, iTerm, dTerm;
 
 	if(link == 'H'){
 
-		errorH = errorH + error;
-		pTerm = pidConsts.Kp_H * error;
-		iTerm = pidConsts.Ki_H * errorH;
-		dTerm = pidConsts.Kd_H * (preErrorH - error);
+		actErrorH = setPoint - actPos; //sets the actual error of the upper link
+		printf("    actErrorH: %d", actErrorH);
+		printf("    errorH: %d\n\r", errorH);
+		errorH = errorH + actErrorH;
+		pTerm = pidConsts.Kp_H * actErrorH;
+		//iTerm = pidConsts.Ki_H * errorH;
+		iTerm = 0;
+		//dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
+		dTerm = 0;
 
-
-		preErrorH = error;
+		preErrorH = actErrorH;
 
 	} else {
-		errorL= errorL + error;
-		pTerm = pidConsts.Kp_L * error;
+
+		actErrorL = setPoint - actPos; //sets the actual error of the Lower link
+
+		errorL= errorL + actErrorL;
+		pTerm = pidConsts.Kp_L * actErrorL;
 		iTerm = pidConsts.Ki_L * errorL;
-		dTerm = pidConsts.Kd_L * (preErrorL - error);
+		dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
 
 
-		preErrorL = error;
+		preErrorL = actErrorL;
 
 	}
 

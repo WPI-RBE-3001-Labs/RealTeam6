@@ -34,9 +34,9 @@ float readCurrent(int motor){
 	//convert the ADC value to a voltage
 	voltageRead = ADCval * 5/((2^10) - 1); //5V range divided by the number of bits
 	//shift the out put down by -2.5V to cancel out the  current shift
-	voltageRead -= 2.5;
+	voltageRead -= 392;
 
 	//convert to current and divide by gain
-	return voltageRead/(.05*20); //output is amps seen across the sense resistor
+	return voltageRead; //output is amps seen across the sense resistor
 }
 
