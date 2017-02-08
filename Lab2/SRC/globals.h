@@ -1,7 +1,7 @@
 /*
  * globals.h
  *
- *  Created on: Jan 23, 2017
+ *  Created on: Feb 7, 2017
  *      Author: nbeeten
  */
 
@@ -20,22 +20,44 @@ unsigned int DAC_VALUE_A;
 unsigned int DAC_VALUE_B;
 int output;
 int rampFlag;
+int PIDFlag;
+int lastPIDFlag;
+
 short button;
+
+
 double ADC_90, ADC_0;
 
 //PID
-unsigned int errorH;
-unsigned int errorL;
-unsigned int preErrorH;
-unsigned int preErrorL;
+int errorH;
+int errorL;
+int preErrorH;
+int preErrorL;
+int actErrorH;
+int actErrorL;
 
-unsigned int pidH;
-unsigned int pidL;
+signed long pidH;
+signed long pidL;
 
-volatile short ADCValues[8];
+unsigned short ADCValues[8];
 
 volatile double pidConstants[8];
 
+int ADCCheckAllChannels;
+
+#define LOWARMPOT 2
+#define HIGHARMPOT 3
+#define POT1 5
+#define POT2 6
+#define POT3 7
+
+#define KP 78
+#define KI 1
+#define KD 83
+
+
 void initGlobals();
+
+
 
 #endif /* SRC_GLOBALS_H_ */

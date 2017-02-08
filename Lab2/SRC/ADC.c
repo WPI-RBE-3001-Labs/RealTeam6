@@ -24,26 +24,22 @@ void initADC(int channel){
 
 	//Disables the DIDR0 register for the corresponding channel
 	//recommended by the data sheet to save power (25.8.6)
-	//DIDR0 |= (1 << channel);
+	DIDR0 |= (1 << channel);
 
 	//sets the Vref to be AVCC (5V)
 	ADMUX = (0 << 7)|(1 << 6);
-	//ADMUX = 1 << 6;
 
 	//Set the ADC prescaler to 128
-	ADCSRA = (1 << 2)|(1 << 1)|(1);
-	//ADCSRA = 1 << 1;
-	//ADCSRA = 1;
+	ADCSRA = (1 << ADPS2)|(1 << ADPS1)|(1 << ADPS0);
 
 	//clears the ADMUX_MUX bits
-	ADMUX = (0b11100000|channel);
+	ADMUX &= (0b11100000);
 
 	//sets the ADMUX_MUX bits to be the corresponding channel
-	// ADMUX |= channel;
+	ADMUX |= channel;
 
 	//enable the ADC
-	ADCSRA |= 1 << 7;
-
+	ADCSRA |= (1 << ADEN);
 }
 
 /**
@@ -56,7 +52,7 @@ void initADC(int channel){
  */
 void clearADC(int channel){
 	//disable the ADC
-	ADCSRA = 0 << 7;
+	ADCSRA = (0 << ADEN);
 
 	//sets the corresponding channel to be an output pin
 	DDRA |= (1 << channel);
@@ -83,28 +79,27 @@ void clearADC(int channel){
 unsigned short getADC(int channel){
 	unsigned short adcVal = 0;
 
-	//clears the ADMUX.MUX[4:0] (used for channel selection)
+	//clears the ADMUX.MUX[4:0] (used for channel selection) left adjust result
 	ADMUX &= 0b11100000;
 
+	//sets the channel for the ADMUX to read from
 	ADMUX |= channel;
 
 	//start conversion
-	ADCSRA = 1 << 6;
+	ADCSRA |= 0b01000000;
 
 	//wait for conversion to end
-	while (~(ADCSRA & 0b01000000)){
-		adcVal = 0;
+	while (ADCSRA & (1 << ADSC)){
+
 	}
 
 	//calculate results of the ADC conversion from ADCL and ADCH (reading ADCL first)
 	if(ADMUX & 0b00100000){ //ADC result is left shifted
-		adcVal |= (ADCL >> 6);
-		adcVal |= (ADCH << 2);
+		adcVal = ((ADCL >> 6)|0b11);
+		adcVal = (ADCH << 2);
 	} else {//ADC result is right shifted
-		adcVal |= ADCL;
-		adcVal |= (ADCH << 8);
+		adcVal = ADC;
 	}
-
 	return adcVal;
 }
 

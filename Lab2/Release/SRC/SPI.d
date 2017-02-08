@@ -1,46 +1,121 @@
-SRC/SPI.d SRC/SPI.o: ../SRC/SPI.c \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/RBELib.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/ADC.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/DAC.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/Debug.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/motors.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/USARTDebug.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/timer.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/Periph.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/pot.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/PID.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/reg_structs.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/ports.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/SPI.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/SetServo.h \
-  R:\ece_mdrive\working\ code\RBELib\include/RBELib/SlaveSelects.h
+SRC/SPI.d SRC/SPI.o: ../SRC/SPI.c ../SRC/main.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/RBELib.h \
+  C:\WinAVR-20100110\avr\include/util/delay.h \
+  C:\WinAVR-20100110\avr\include/inttypes.h \
+  C:\WinAVR-20100110\avr\include/stdint.h \
+  C:\WinAVR-20100110\avr\include/util/delay_basic.h \
+  C:\WinAVR-20100110\avr\include/avr/io.h \
+  C:\WinAVR-20100110\avr\include/avr/sfr_defs.h \
+  C:\WinAVR-20100110\avr\include/avr/iom644p.h \
+  C:\WinAVR-20100110\avr\include/avr/iomxx4.h \
+  C:\WinAVR-20100110\avr\include/avr/portpins.h \
+  C:\WinAVR-20100110\avr\include/avr/common.h \
+  C:\WinAVR-20100110\avr\include/avr/version.h \
+  C:\WinAVR-20100110\avr\include/avr/fuse.h \
+  C:\WinAVR-20100110\avr\include/avr/lock.h \
+  C:\WinAVR-20100110\avr\include/avr/interrupt.h \
+  C:\WinAVR-20100110\avr\include/string.h \
+  C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include/stddef.h \
+  C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include/stdarg.h \
+  C:\WinAVR-20100110\avr\include/stdio.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/ADC.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/DAC.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/Debug.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/motors.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/USARTDebug.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/timer.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/Periph.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/pot.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/PID.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/reg_structs.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/ports.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SPI.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SetServo.h \
+  C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SlaveSelects.h \
+  ../SRC/globals.h ../SRC/freerunADC.h ../SRC/ADCcalc.h \
+  ../SRC/currentSense.h ../SRC/PIDmotors.h ../SRC/printStatements.h \
+  ../SRC/buttons.h ../SRC/pwm.h
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/RBELib.h:
+../SRC/main.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/ADC.h:
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/RBELib.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/DAC.h:
+C:\WinAVR-20100110\avr\include/util/delay.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/Debug.h:
+C:\WinAVR-20100110\avr\include/inttypes.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/motors.h:
+C:\WinAVR-20100110\avr\include/stdint.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/USARTDebug.h:
+C:\WinAVR-20100110\avr\include/util/delay_basic.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/timer.h:
+C:\WinAVR-20100110\avr\include/avr/io.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/Periph.h:
+C:\WinAVR-20100110\avr\include/avr/sfr_defs.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/pot.h:
+C:\WinAVR-20100110\avr\include/avr/iom644p.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/PID.h:
+C:\WinAVR-20100110\avr\include/avr/iomxx4.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/reg_structs.h:
+C:\WinAVR-20100110\avr\include/avr/portpins.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/ports.h:
+C:\WinAVR-20100110\avr\include/avr/common.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/SPI.h:
+C:\WinAVR-20100110\avr\include/avr/version.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/SetServo.h:
+C:\WinAVR-20100110\avr\include/avr/fuse.h:
 
-R:\ece_mdrive\working\ code\RBELib\include/RBELib/SlaveSelects.h:
+C:\WinAVR-20100110\avr\include/avr/lock.h:
+
+C:\WinAVR-20100110\avr\include/avr/interrupt.h:
+
+C:\WinAVR-20100110\avr\include/string.h:
+
+C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include/stddef.h:
+
+C:\WinAVR-20100110\lib\gcc\avr\4.3.3\include/stdarg.h:
+
+C:\WinAVR-20100110\avr\include/stdio.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/ADC.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/DAC.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/Debug.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/motors.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/USARTDebug.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/timer.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/Periph.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/pot.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/PID.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/reg_structs.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/ports.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SPI.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SetServo.h:
+
+C:\Users\nbeeten\git\rbelib\RBELib\include/RBELib/SlaveSelects.h:
+
+../SRC/globals.h:
+
+../SRC/freerunADC.h:
+
+../SRC/ADCcalc.h:
+
+../SRC/currentSense.h:
+
+../SRC/PIDmotors.h:
+
+../SRC/printStatements.h:
+
+../SRC/buttons.h:
+
+../SRC/pwm.h:

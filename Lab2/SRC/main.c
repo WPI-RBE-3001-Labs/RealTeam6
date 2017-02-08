@@ -17,7 +17,7 @@
 
 #define MODE PID_CONTROL
 
-
+#define LINKTARGET 100
 
 
 /////BIT MASKS FOR DAC/////
@@ -26,6 +26,8 @@
 #define ADDRESS_A 0b0001
 #define ADDRESS_B 0b0010
 #define ADDRESS_ALL 0b1111
+
+
 
 int main(){
 	//start USART at baud rate of 115200
@@ -38,15 +40,10 @@ int main(){
 	DAC_VALUE_B = 4095;
 	rampFlag = 0;
 
-	//sets the ADC to Free Run Mode on the ADC Channel chosen
-	//freeRunADC(DBUS0_CHANNEL);
-
-	//test stuff
-	for(int i = 0; i <= 7; i++){
-		freeRunADC(i);
-	}
-
-
+	//inits the ADC for each Potentiometer
+	initADC(POT1);
+	initADC(POT2);
+	initADC(POT3);
 
 	switch(MODE){
 
@@ -94,170 +91,71 @@ int main(){
 		break; //end of case ARM_DRIVE
 
 	case CURRENT_SENSE:
+		initSPI();
 		initCurrent(0);
 		while(1){
 			driveLink(0, 1);
+			printf("Current 0: %f\n\r",(double) readCurrent(0));
 			_delay_ms(200);
 			driveLink(0, 0);
-			_delay_ms(200);
 			printf("Current 0: %f\n\r",(double) readCurrent(0));
+			_delay_ms(200);
 		}
 		break; //end of case CURRENT_SENSE
 
 	case PID_CONTROL:
-
+		initSPI();
 		while(1){
-
 			//@todo need to add feedforward to PID, shoudl just be a value added based off of gravity but im not sure how that works
 			//maybe we use the current sensor for that could be super wrong
 
 			//the following array values come from the board as they are stored in sequence from the ADC
 			//4-7 is analog in from pots
 			for(int i = 4; i <= 7; i++){
-				pidConstants[i] = ADCtoHundred(ADCValues[i]);
+				pidConstants[i] = ADCtoHundred(getADC(i));
 			}
-			setConst('H', pidConstants[4], pidConstants[5], pidConstants[6]);
-			//3 is higher link *should probably check if i'm wrong here*
-			pidH = calcPID('H', 60, ADCtoAngle(ADCValues[3]) );
+			setConst('H', KP, KI, KD);
+			printf("     Target: %d", LINKTARGET);
+			printf("     Actual: %f", ADCtoAngle(getADC(HIGHARMPOT)));
+			//calc what to send to motor
+			pidH = calcPID('H', LINKTARGET, ADCtoAngle(getADC(HIGHARMPOT)) );
 
-			if(errorH > 0){
-				driveLinkPID(1, 1, pidH);
-			}else if (errorH < 0){
-				driveLinkPID(1, 0, pidH);
-			}
+			printf("     Motor Command: %d", pidH);
+			printf("     Current: %f\n\r", (double) readCurrent(1));
 
+			driveLinkPIDDir(1, pidH);
 		}
-
 		break; //end of case PID_CONTROL
 
 	case ARM_POSITION:
+		initSPI();
+		initTimer(1,0,1439);
 
+		while(1){
+			if (PIDFlag == 1){
+				ADCValues[LOWARMPOT] = getADC(LOWARMPOT);
+				ADCValues[POT1] = getADC(POT1);
+				ADCValues[POT2] = getADC(POT2);
+				ADCValues[POT3] = getADC(POT3);
+
+				setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
+				signed int Lpwr = calcPID('L',75,ADCtoAngle(ADCValues[LOWARMPOT]));
+
+				driveLinkPID(0,Lpwr);
+				stopSelect(1);
+
+				printf("Kp: %d, Ki: %d, Kd: %d, Low Arm Pot: %f\n\r", ADCValues[POT1], ADCValues[POT2], ADCValues[POT3], ADCtoAngle(ADCValues[LOWARMPOT]));
+				PIDFlag = 0;
+			}
+		}
 		break; //end of case ARM_POSITION
 	}
-
-}
-
-
+} //end of main
 
 
 
 int returnBITS(){
 	return ADMUX;
-}
-
-
-
-/**
- * @brief prints the time stamp, pot value, pot angle, pot milivolts
- */
-void printPotVal(){
-	double potAngle = 0;
-	double potmV = 0;
-
-	//save all values to things that can be used in a print function
-	potAngle = ADCtoAngle(ADCvalue);
-	potmV = ADCtoMiliV(ADCvalue);
-	timeVal = timerCnt * 0.5;
-
-	printf("%f, %d, %g, %f\n\r", timeVal, ADCvalue, potAngle, potmV);
-}
-
-void printPWMVal(){
-	double dutyCyc = 0;
-	//int freq = 0;
-	//int state = 0;
-
-	printf("%f, %d, %d, %d\n\r", dutyCyc, button, Thigh, ADCvalue);
-}
-/**
- * @brief sets the button global variable to be the button that was pressed.
- *
- * Checks starting at port 7 and works down
- */
-void checkButtons(){
-	if (PINC & 256){
-		button = 7;
-
-	}
-	else if(PINC & 128){
-		button = 6;
-
-	}
-	else if(PINC & 64){
-		button = 5;
-
-	}
-	else if(PINC & 16){
-		button = 4;
-	}
-	else{
-		button = 10;
-	}
-}
-
-/**
- * @brief inits the buttons on PORTB by setting all of PORTB pins to input
- */
-void initButtons(){
-	//sets all of PortC to be inputs
-	DDRC &= 0b00000000;
-}
-
-void initPWMPin(){
-	//sets all of PortB to be outputs;
-	DDRB &= 0b11111111;
-	PORTB &= 0b00000000;
-	PINB &= 0b00000000;
-
-}
-
-void generatePWM(unsigned int countTo){
-	//if timer reaches countTo
-	switch(output){
-
-	case 1:
-		if(PWMTimerCnt >= countTo){
-			//switch port
-			output = 0;
-			PWMTimerCnt = 0;
-			putCharDebug('p');
-			PORTB = 0b00000000;
-		}
-		break; //end case 1
-
-	case 0:
-		if(PWMTimerCnt >= countTo){
-			//switch port
-			output = 1;
-			PWMTimerCnt = 0;
-			putCharDebug('s');
-			PORTB = 0b00000010;
-		}
-		break; //end case 0
-	}
-}
-
-void outputPWM(){
-	switch(button){
-
-	case 7:
-		//generates a 100Hz signal
-		Thigh = 39;
-		generatePWM(Thigh);
-		break;
-
-	case 6:
-		//generates 20Hz signal
-		Thigh = 195;
-		generatePWM(Thigh);
-		break;
-
-	case 5:
-		//generates a 1Hz signal
-		Thigh = 3906;
-		generatePWM(Thigh);
-		break;
-	}
 }
 
 void ramp(){

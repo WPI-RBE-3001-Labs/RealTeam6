@@ -26,7 +26,7 @@ double ADCtoMiliV(unsigned int potVal){
  * @return the Angle of the potentiometer
  */
 double ADCtoAngle(unsigned int potVal){
-	return ((double) potVal-ADC_0)*(90/(ADC_90-ADC_0));
+	return (((double) potVal)-ADC_0)*(90/(ADC_90-ADC_0))+14;
 }
 
 

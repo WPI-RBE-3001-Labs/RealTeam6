@@ -12,15 +12,19 @@ unsigned long timerCnt = 0;
 
 
 ISR(TIMER1_OVF_vect){
-	//update the timer count every .455 seconds
+	//update the timer count every .227 seconds
 	timerCnt++;
 	if(timerCnt%11){
-		timerCnt++;
+		timerCnt--;
 	}
 }
 
 ISR(TIMER0_COMPA_vect){
 	PWMTimerCnt++;
+}
+
+ISR(TIMER1_COMPA_vect){
+	PIDFlag = 1;
 }
 
 unsigned long getTimerCnt(){
@@ -44,9 +48,16 @@ unsigned long getTimerCnt(){
 void initTimer(int timer, int mode, unsigned int comp){
 	switch(timer){
 	case 1:
-		TCCR1A = 0b00000000;
-		TCCR1B = 0b01000011; //set up for 64 pre-scaler
-		TIMSK1 |= (1 << TOIE1); // enable the Overflow Interrupt
+		if(mode == 1){
+			TCCR1A = 0b00000000;
+			TCCR1B = 0b01000011; //set up for 64 pre-scaler
+			TIMSK1 |= (1 << TOIE1); // enable the Overflow Interrupt
+		} else if(mode==0){
+			TCCR1A = 0b10000000; //set to CTC mode with the OC0A cleared on Compare Match
+			TCCR1B = 0b11000011; //set up for 64 pre-scaler
+			TIMSK1 |= (1 << OCIE1A); // enable the OC0A Interrupt
+			OCR1A = comp;//set the number to count to
+		}
 		break;
 
 	case 0:

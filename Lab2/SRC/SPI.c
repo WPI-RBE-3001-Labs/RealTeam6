@@ -48,8 +48,6 @@ void initSPI(){
  * @param data The byte to send down the SPI bus.
  * @return value The byte shifted in during transmit
  *
- * @todo Make a function that will send a byte of data through the SPI
- * and return whatever was sent back.
  */
 unsigned char spiTransceive(BYTE data){
 

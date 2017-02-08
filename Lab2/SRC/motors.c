@@ -5,11 +5,12 @@
  *      Author: nbeeten
  */
 #include "RBElib/RBELib.h"
+#include "main.h"
+#include <math.h>
 
 /**
  * @brief Helper function to stop the motors on the arm.
  *
- * @todo Create way to stop the motors using the DAC.
  */
 void stopMotors(){
 	setDAC(0, 0);
@@ -28,6 +29,9 @@ void stopMotors(){
  */
 void gotoAngles(int lowerTheta, int upperTheta){
 
+	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngle(getADC(LOWARMPOT))));
+	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngle(getADC(HIGHARMPOT))));
+
 }
 
 /**
@@ -40,6 +44,17 @@ void gotoAngles(int lowerTheta, int upperTheta){
  */
 void gotoXY(int x, int y){
 
+	//https://ashwinnarayan.blogspot.com/2014/07/inverse-kinematics-for-2dof-arm.html
+	//for equation
+
+	int LTheta, HTheta;
+	HTheta = atan2(sqrt(1-((x^2+y^2-6^2-4.25^2)/(2*6*4.25)) ), ((x^2+y^2-6^2-4.25^2)/(2*6*4.25)));
+	int K1 = 6 + 4.25*cos(HTheta);
+	int K2 = 4.25*sin(HTheta);
+	int lamda = atan2(K1,K2);
+	LTheta = atan2(y,x)-lamda;
+	gotoAngles(LTheta, HTheta);
+
 }
 
 /**
@@ -48,7 +63,6 @@ void gotoXY(int x, int y){
  * @param link Which link to control.
  * @param dir Which way to drive the link.
  *
- * @todo Create a way to drive either link in any direction.
  */
 void driveLink(int link, int dir){
 	switch (link){
