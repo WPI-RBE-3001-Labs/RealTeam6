@@ -66,27 +66,28 @@ void driveLinkPID(int link, int pwr){
 /*
  * @brief Drives the selected link in the desired direction at the desired speed
  * @param link The link you want to set the values for (1 for H or 0 for L).
- * @param dir The direction you want the link to rotate (0 or 1).
  * @param pwr The the power that you want to drive the motor at.
  */
 void driveLinkPIDDir(int link,  int pwr){
 	switch (link){
 	case 0: //lower link
-		if(pwr > 0){
+		if(actErrorL > 0){
 			setDAC(0, pwr);
 			setDAC(1, 0);
-		} else if(pwr < 0){
+		} else if(actErrorL < 0){
 			setDAC(0, 0);
 			setDAC(1, pwr);
 		}
 	break;
 	case 1: //high link
+		printf("    actErrorH: %d", actErrorH);
 		if( actErrorH > 0){
-			setDAC(2, pwr);
-			setDAC(3, 0);
-		} else if(actErrorH < 0){
 			setDAC(2, 0);
 			setDAC(3, pwr);
+
+		} else if(actErrorH < 0){
+			setDAC(2, pwr);
+			setDAC(3, 0);
 		}
 	break;
 	}

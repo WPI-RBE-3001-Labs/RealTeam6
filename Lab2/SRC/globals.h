@@ -29,12 +29,12 @@ short button;
 double ADC_90, ADC_0;
 
 //PID
-unsigned int errorH;
-unsigned int errorL;
-unsigned int preErrorH;
-unsigned int preErrorL;
-unsigned int actErrorH;
-unsigned int actErrorL;
+int errorH;
+int errorL;
+int preErrorH;
+int preErrorL;
+int actErrorH;
+int actErrorL;
 
 signed long pidH;
 signed long pidL;

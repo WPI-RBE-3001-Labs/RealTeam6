@@ -17,6 +17,7 @@
 
 #define MODE PID_CONTROL
 
+#define LINKTARGET 60
 
 /////BIT MASKS FOR DAC/////
 #define WRITE_MODE 0b0000
@@ -30,6 +31,11 @@
 #define POT1 5
 #define POT2 6
 #define POT3 7
+
+#define KP 140
+#define KI 1
+#define KD 1
+
 
 int main(){
 	//start USART at baud rate of 115200
@@ -116,22 +122,16 @@ int main(){
 			for(int i = 4; i <= 7; i++){
 				pidConstants[i] = ADCtoHundred(getADC(i));
 			}
-			setConst('H', pidConstants[POT1], pidConstants[POT2], pidConstants[POT3]);
-			//3 is higher link *should probably check if i'm wrong here*
-			printf("     armpot: %f", ADCtoAngle(getADC(HIGHARMPOT)));
-			printf("     Kp: %f", pidConstants[POT1]);
-			pidH = calcPID('H', 90, ADCtoAngle(getADC(HIGHARMPOT)) );
-			//printf("pidH: %i\n\r", pidH);
-			printf("    pidh: %d", pidH);
+			setConst('H', KP, KI, KD);
+			printf("     Target: %d", LINKTARGET);
+			printf("     Actual: %f", ADCtoAngle(getADC(HIGHARMPOT)));
+			//calc what to send to motor
+			pidH = calcPID('H', 60, ADCtoAngle(getADC(HIGHARMPOT)) );
+
+			printf("     Motor Command: %d", pidH);
+			printf("     Current: %f\n\r", (double) readCurrent(1));
 
 			driveLinkPIDDir(1, pidH);
-
-			/*
-			if(errorH > 0){
-				driveLinkPIDDir(1, 1, pidH);
-			}else if (errorH < 0){
-				driveLinkPIDDir(1, 0, pidH);
-			}*/
 		}
 		break; //end of case PID_CONTROL
 
@@ -147,7 +147,7 @@ int main(){
 				ADCValues[POT3] = getADC(POT3);
 
 				setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
-				signed int Lpwr = calcPID('L',60,ADCtoAngle(ADCValues[LOWARMPOT]));
+				signed int Lpwr = calcPID('L',75,ADCtoAngle(ADCValues[LOWARMPOT]));
 
 				driveLinkPID(0,Lpwr);
 				stopSelect(1);
@@ -156,7 +156,7 @@ int main(){
 				PIDFlag = 0;
 			}
 		}
-	break; //end of case ARM_POSITION
+		break; //end of case ARM_POSITION
 	}
 } //end of main
 

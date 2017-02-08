@@ -35,6 +35,7 @@ void setConst(char link, float Kp, float Ki, float Kd){
 
 /**
  * @brief Calculate the PID value.
+ * @todo add feed forward
  * @param  link Which link to calculate the error for (Use 'U' and 'L').
  * @param setPoint The desired position of the link.
  * @param actPos The current position of the link.
@@ -48,28 +49,36 @@ signed int calcPID(char link, int setPoint, int actPos){
 	if(link == 'H'){
 
 		actErrorH = setPoint - actPos; //sets the actual error of the upper link
-		printf("    actErrorH: %d", actErrorH);
-		printf("    errorH: %d\n\r", errorH);
+
 		errorH = errorH + actErrorH;
 		pTerm = pidConsts.Kp_H * actErrorH;
-		//iTerm = pidConsts.Ki_H * errorH;
-		iTerm = 0;
-		//dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
-		dTerm = 0;
+		iTerm = pidConsts.Ki_H/10 * errorH;
+		if(iTerm > 50){
+			iTerm = 50;
+		}
+		//iTerm = 0;
+		dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
+		//dTerm = 0;
 
 		preErrorH = actErrorH;
 
 	} else {
 
-		actErrorL = setPoint - actPos; //sets the actual error of the Lower link
+		actErrorH = setPoint - actPos; //sets the actual error of the upper link
 
-		errorL= errorL + actErrorL;
-		pTerm = pidConsts.Kp_L * actErrorL;
-		iTerm = pidConsts.Ki_L * errorL;
-		dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
+		printf("    errorH: %d\n\r", errorH);
+		errorH = errorH + actErrorH;
+		pTerm = pidConsts.Kp_H * actErrorH;
+		if(iTerm <= 200){
+			iTerm = pidConsts.Ki_H * errorH;
+		} else {
+			iTerm = 200; //cap the i value
+		}
+		//iTerm = 0;
+		dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
+		//dTerm = 0;
 
-
-		preErrorL = actErrorL;
+		preErrorH = actErrorH;
 
 	}
 

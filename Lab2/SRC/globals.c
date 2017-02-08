@@ -51,4 +51,5 @@ void initGlobals(){
 	errorH = 0;
 	errorL = 0;
 
+
 }
