@@ -1,7 +1,7 @@
 /*
  * globals.h
  *
- *  Created on: Jan 23, 2017
+ *  Created on: Feb 7, 2017
  *      Author: nbeeten
  */
 
@@ -45,6 +45,19 @@ volatile double pidConstants[8];
 
 int ADCCheckAllChannels;
 
+#define LOWARMPOT 2
+#define HIGHARMPOT 3
+#define POT1 5
+#define POT2 6
+#define POT3 7
+
+#define KP 78
+#define KI 1
+#define KD 83
+
+
 void initGlobals();
+
+
 
 #endif /* SRC_GLOBALS_H_ */

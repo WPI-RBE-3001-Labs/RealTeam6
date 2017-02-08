@@ -5,6 +5,8 @@
  *      Author: nbeeten
  */
 #include "RBElib/RBELib.h"
+#include "main.h"
+#include <math.h>
 
 /**
  * @brief Helper function to stop the motors on the arm.
@@ -27,6 +29,9 @@ void stopMotors(){
  */
 void gotoAngles(int lowerTheta, int upperTheta){
 
+	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngle(getADC(LOWARMPOT))));
+	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngle(getADC(HIGHARMPOT))));
+
 }
 
 /**
@@ -38,6 +43,12 @@ void gotoAngles(int lowerTheta, int upperTheta){
  * @todo Use kinematic equations to move the end effector to the desired position.
  */
 void gotoXY(int x, int y){
+
+	int LTheta, HTheta;
+	//HTheta = atan2(sqrt(1-((x^2+y^2-6^2-4.25^2)/(2*6*4.25)) ), ((x^2+y^2-6^2-4.25^2)/(2*6*4.25))))
+
+
+	gotoAngles(LTheta, HTheta);
 
 }
 

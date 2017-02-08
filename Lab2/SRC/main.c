@@ -17,7 +17,8 @@
 
 #define MODE PID_CONTROL
 
-#define LINKTARGET 60
+#define LINKTARGET 100
+
 
 /////BIT MASKS FOR DAC/////
 #define WRITE_MODE 0b0000
@@ -26,15 +27,6 @@
 #define ADDRESS_B 0b0010
 #define ADDRESS_ALL 0b1111
 
-#define LOWARMPOT 2
-#define HIGHARMPOT 3
-#define POT1 5
-#define POT2 6
-#define POT3 7
-
-#define KP 140
-#define KI 1
-#define KD 1
 
 
 int main(){
@@ -126,7 +118,7 @@ int main(){
 			printf("     Target: %d", LINKTARGET);
 			printf("     Actual: %f", ADCtoAngle(getADC(HIGHARMPOT)));
 			//calc what to send to motor
-			pidH = calcPID('H', 60, ADCtoAngle(getADC(HIGHARMPOT)) );
+			pidH = calcPID('H', LINKTARGET, ADCtoAngle(getADC(HIGHARMPOT)) );
 
 			printf("     Motor Command: %d", pidH);
 			printf("     Current: %f\n\r", (double) readCurrent(1));

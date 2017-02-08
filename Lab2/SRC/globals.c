@@ -7,6 +7,7 @@
 
 //#include "main.h"
 #include "globals.h"
+
 void initGlobals(){
 
 	ADCvalue = 0;
