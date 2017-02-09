@@ -55,6 +55,8 @@ int ADCCheckAllChannels;
 #define KI 1
 #define KD 83
 
+double UPPER_LEN;
+double LOWER_LEN;
 
 void initGlobals();
 

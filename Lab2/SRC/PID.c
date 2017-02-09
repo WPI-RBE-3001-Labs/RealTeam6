@@ -64,21 +64,19 @@ signed int calcPID(char link, int setPoint, int actPos){
 
 	} else {
 
-		actErrorH = setPoint - actPos; //sets the actual error of the upper link
+		actErrorL = setPoint - actPos; //sets the actual error of the upper link
 
-		printf("    errorH: %d\n\r", errorH);
-		errorH = errorH + actErrorH;
-		pTerm = pidConsts.Kp_H * actErrorH;
-		if(iTerm <= 200){
-			iTerm = pidConsts.Ki_H * errorH;
-		} else {
-			iTerm = 200; //cap the i value
+		errorL = errorL + actErrorL;
+		pTerm = pidConsts.Kp_L * actErrorL;
+		iTerm = pidConsts.Ki_L/10 * errorL;
+		if(iTerm > 50){
+			iTerm = 50;
 		}
 		//iTerm = 0;
-		dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
+		dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
 		//dTerm = 0;
 
-		preErrorH = actErrorH;
+		preErrorL = actErrorL;
 
 	}
 

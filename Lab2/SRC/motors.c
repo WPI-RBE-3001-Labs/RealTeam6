@@ -6,6 +6,7 @@
  */
 #include "RBElib/RBELib.h"
 #include "main.h"
+#include "ADCcalc.h"
 #include <math.h>
 
 /**
@@ -29,8 +30,8 @@ void stopMotors(){
  */
 void gotoAngles(int lowerTheta, int upperTheta){
 
-	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngle(getADC(LOWARMPOT))));
-	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngle(getADC(HIGHARMPOT))));
+	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngleL(getADC(LOWARMPOT))));
+	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngleH(getADC(HIGHARMPOT))));
 
 }
 
@@ -48,11 +49,12 @@ void gotoXY(int x, int y){
 	//for equation
 
 	int LTheta, HTheta;
-	HTheta = atan2(sqrt(1-((x^2+y^2-6^2-4.25^2)/(2*6*4.25)) ), ((x^2+y^2-6^2-4.25^2)/(2*6*4.25)));
+	HTheta = atan2(sqrt(1-((x*x+y*y-6*6-4.25*4.25)/(2*6*4.25)) ), ((x*x+y*y-6*6-4.25*4.25)/(2*6*4.25)));
 	int K1 = 6 + 4.25*cos(HTheta);
 	int K2 = 4.25*sin(HTheta);
 	int lamda = atan2(K1,K2);
 	LTheta = atan2(y,x)-lamda;
+
 	gotoAngles(LTheta, HTheta);
 
 }
