@@ -16,8 +16,11 @@
 #define PID_CONTROL 4
 #define ARM_POSITION 5
 #define GO_XY 6
+#define ENCODE 7
+#define ACCELERATE 8
 
-#define MODE GO_XY
+#define MODE ENCODE
+
 
 #define LINKTARGET 90
 #define LINKTARGET_2 45
@@ -184,6 +187,22 @@ int main(){
 			}
 		}
 		break; //end of case GO_XY
+
+	case ENCODE:
+		initEncoders();
+		while(1){
+			printf(" Encoder countsm %d", EncoderCounts( 0 ));
+		}
+		break;
+
+	case ACCELERATE:
+		initAccel();
+		while(1){
+			printf("Accel x %d", GetAccelerationH48C(0));
+		}
+		break;
+
+
 	}
 } //end of main
 

@@ -17,6 +17,8 @@
 #include "printStatements.h"
 #include "buttons.h"
 #include "pwm.h"
+#include "Encoder.h"
+#include "Accelerometer.h"
 
 #define MAX_ADC 1023
 #define ADC_CHANNEL 4
