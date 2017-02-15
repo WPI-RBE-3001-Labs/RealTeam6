@@ -189,13 +189,36 @@ int main(){
 		break; //end of case GO_XY
 
 	case ENCODE:
-		printf(" a");
 		initSPI();
 		initEncoders();
+		initButtons();
+		initTimer(1, 2, 91);
 		long result = 0;
+		stopMotors();
 		while(1){
-
-			printf(" Encoder counts: %d\n\r", EncoderCounts('L'));
+			if(encoderFlag|PIDFlag){
+				printf("b");
+				result += EncoderCounts('L');
+				printf(" Encoder counts: %ld \n\r", result);
+				encoderFlag = 0;
+				PIDFlag = 0;
+			}
+			checkButtons();
+			//printf("%d\n\r", button);
+			if(button == 4){ //+3V
+				setDAC(2, 16000);
+				setDAC(3, 0);
+		 	} else if(button == 5){ //-3V
+		 		setDAC(3, 16000);
+		 		setDAC(2, 0);
+		 	} else if(button == 6){ //6V
+		 		setDAC(2, 32767);
+		 		setDAC(3, 0);
+		 	} else if(button == 7){ //0V
+		 		setDAC(2, 0);
+		 		setDAC(3, 0);
+		 	}
+			_delay_ms(100);
 
 		}
 		break;

@@ -30,9 +30,9 @@ void initSPI(){
 
 	//DDRC |= (1 << DDC4) | ( 1<< DDC5);
 
-	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
+	SPCR |= (1 << SPE) |  (1<<MSTR) | (0 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
 
-	SPSR &= ~(1 << SPI2X);
+	SPSR &= ~(0 << SPI2X);
 
 
 //	spiTransceive(0b01101111);

@@ -25,6 +25,7 @@ int lastPIDFlag;
 
 short button;
 
+short encoderFlag;
 
 double ADC_90, ADC_0;
 

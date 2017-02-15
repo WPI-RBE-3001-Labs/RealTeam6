@@ -26,6 +26,7 @@ void initGlobals(){
 	rampFlag = 0;
 	ADCCheckAllChannels = 0;
 	PIDFlag = 0;
+	encoderFlag = 0;
 	lastPIDFlag = 0;
 
 	ADCValues[0] = 0;

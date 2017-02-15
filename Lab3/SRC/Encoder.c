@@ -19,12 +19,12 @@ void initEncoder(char pos){
 		ENCODER_SS_1 = 0;
 		spiTransceive(CLR_CNTR);
 		ENCODER_SS_1 = 1;
-
+		_delay_ms(1);
 		ENCODER_SS_1 = 0;
 		spiTransceive(WRITE_MDR0);
-		spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
+		spiTransceive(ONE_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
 		ENCODER_SS_1 = 1;
-
+		_delay_ms(1);
 		ENCODER_SS_1 = 0;
 		spiTransceive(WRITE_MDR1);
 		spiTransceive(NO_FLAGS|CNTR2_BYTE|ENABLE_CNT);
@@ -36,12 +36,12 @@ void initEncoder(char pos){
 		ENCODER_SS_0 = 0;
 		spiTransceive(CLR_CNTR);
 		ENCODER_SS_0 = 1;
-
+		_delay_ms(1);
 		ENCODER_SS_0 = 0;
 		spiTransceive(WRITE_MDR0);
 		spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
 		ENCODER_SS_0 = 1;
-
+		_delay_ms(1);
 		ENCODER_SS_0 = 0;
 		spiTransceive(WRITE_MDR1);
 		spiTransceive(NO_FLAGS|CNTR2_BYTE|ENABLE_CNT);
@@ -63,9 +63,11 @@ void initEncoders(){
 	initEncoder('L');
 
 }
-long EncoderCounts( char __chan ){
-	long encValue = 0;
-	long one, two, three, four;
+int EncoderCounts( char __chan ){
+	//long encValue = 0;
+	long one, two;
+	one = 0;
+	two = 0;
 	if (__chan != 'H' && __chan != 'L') {
 		return -1; //Invalid channel
 	}
@@ -74,28 +76,36 @@ long EncoderCounts( char __chan ){
 	case 'H':
 
 		ENCODER_SS_1 = 0;
+		//printf("READY   ");
 		spiTransceive(READ_CNTR);
-		one = (long)spiTransceive(0) << 24;
-		two = (long)spiTransceive(0) << 16;
-		three = (long)spiTransceive(0) << 8;
-		four = (long)spiTransceive(0) << 0;
+		//printf("GO   ");
+		one = spiTransceive(0) << 8;
+		two = spiTransceive(0);
+		//printf("FINISH   ");
 		ENCODER_SS_1 = 1;
-		printf(" HIGHER ");
+		//_delay_ms(1);
+		ENCODER_SS_1 = 0;
+		spiTransceive(CLR_CNTR);
+		//printf("CLEAR   ");
+		ENCODER_SS_1 = 1;
+
 		break;
 
 	case 'L':
 		ENCODER_SS_0 = 0;
 		spiTransceive(READ_CNTR);
-		one = (long)spiTransceive(0) << 24;
-		two = (long)spiTransceive(0) << 16;
-		three = (long)spiTransceive(0) << 8;
-		four = (long)spiTransceive(0) << 0;
+
+		one = spiTransceive(0) << 8;
+		two = spiTransceive(0);
 		ENCODER_SS_0 = 1;
-		printf(" %d -- %d --- %d ----%d",one, two, three, four);
+		_delay_ms(1);
+		ENCODER_SS_0 = 0;
+		spiTransceive(CLR_CNTR);
+		ENCODER_SS_0 = 1;
 		break;
 
 
 	}
 
-	return encValue;
+	return (one|two);
 }
