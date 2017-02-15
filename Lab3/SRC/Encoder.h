@@ -8,6 +8,11 @@
 #ifndef ENCODER_H_
 #define ENCODER_H_
 
+
+#define HIGH_ENCODER_SS 4 //PORT C
+#define LOW_ENCODER_SS 5 //PORT C
+
+
 #define NON_QUADRATURE_COUNT 0X00
 #define ONE_QUADRATURE_COUNT 0X01
 #define TWO_QUADRATURE_COUNT 0X02
@@ -66,7 +71,7 @@
 
 void initEncoder(char pos);
 void initEncoders();
-int EncoderCounts( int __chan );
+long EncoderCounts( char __chan );
 
 
 

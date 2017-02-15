@@ -28,6 +28,8 @@ void initSPI(){
 
 	DDRB &= ~(1 << DDB6);//MISO enable
 
+	//DDRC |= (1 << DDC4) | ( 1<< DDC5);
+
 	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
 
 	SPSR &= ~(1 << SPI2X);

@@ -9,28 +9,51 @@
 #include "RBELib/RBELib.h"
 
 void initEncoder(char pos){
+	//dont forget to init SPI
+	//low encoder is dsub0 and high encoder is dsub1
 
-	genericSPIInit();
+	switch(pos){
 
-	//set SS to output
-	DDRC |= pos == 'H' ? (1 << 5) : (1 << 4);
-	//set SS high
-	PORTC |= pos == 'H' ? (1 << 5) : (1 << 4);
+	case 'H':
+		DDRC |= (1 << 5);
+		ENCODER_SS_1 = 0;
+		spiTransceive(CLR_CNTR);
+		ENCODER_SS_1 = 1;
+
+		ENCODER_SS_1 = 0;
+		spiTransceive(WRITE_MDR0);
+		spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
+		ENCODER_SS_1 = 1;
+
+		ENCODER_SS_1 = 0;
+		spiTransceive(WRITE_MDR1);
+		spiTransceive(NO_FLAGS|CNTR2_BYTE|ENABLE_CNT);
+		ENCODER_SS_1 = 1;
+		break;
+
+	case 'L':
+		DDRC |= (1 << 4);
+		ENCODER_SS_0 = 0;
+		spiTransceive(CLR_CNTR);
+		ENCODER_SS_0 = 1;
+
+		ENCODER_SS_0 = 0;
+		spiTransceive(WRITE_MDR0);
+		spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
+		ENCODER_SS_0 = 1;
+
+		ENCODER_SS_0 = 0;
+		spiTransceive(WRITE_MDR1);
+		spiTransceive(NO_FLAGS|CNTR2_BYTE|ENABLE_CNT);
+		ENCODER_SS_0 = 1;
+		break;
+
+	}
 
 
-	//clears the cntr register
-	PORTC &= pos == 'H' ? ~(1 << 5) : ~(1 << 4);
-	spiTransceive(CLR_CNTR);
-	PORTC |= pos == 'H' ? (1 << 5) : (1 << 4);
 
-	PORTC &= pos == 'H' ? ~(1 << 5) : ~(1 << 4);
-	spiTransceive(WRITE_MDR0);
-	spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX|ASYNCHRONOUS_INDEX|CLK_DIV_FACTOR1);
-	PORTC |= pos == 'H' ? (1 << 5) : (1 << 4);
-	PORTC &= pos == 'H' ? ~(1 << 5) : ~(1 << 4);
-	spiTransceive(WRITE_MDR1);
-	spiTransceive(NO_FLAGS|CNTR2_BYTE|ENABLE_CNT);
-	PORTC |= pos == 'H' ? (1 << 5) : (1 << 4);
+
+	//spiTransceive(0x20|0x00);
 }
 
 
@@ -40,18 +63,39 @@ void initEncoders(){
 	initEncoder('L');
 
 }
-int EncoderCounts( int __chan ){
-	int encValue = 0;
-	if(__chan == 0){
-		//low link
-		encValue = PINCbits._P5;
-		return encValue;
-	} else if(__chan == 1){
-		//high link
-		encValue = PINCbits._P4;
-		return encValue;
-	} else {
-		return -1;
+long EncoderCounts( char __chan ){
+	long encValue = 0;
+	long one, two, three, four;
+	if (__chan != 'H' && __chan != 'L') {
+		return -1; //Invalid channel
+	}
+	switch(__chan){
+
+	case 'H':
+
+		ENCODER_SS_1 = 0;
+		spiTransceive(READ_CNTR);
+		one = (long)spiTransceive(0) << 24;
+		two = (long)spiTransceive(0) << 16;
+		three = (long)spiTransceive(0) << 8;
+		four = (long)spiTransceive(0) << 0;
+		ENCODER_SS_1 = 1;
+		printf(" HIGHER ");
+		break;
+
+	case 'L':
+		ENCODER_SS_0 = 0;
+		spiTransceive(READ_CNTR);
+		one = (long)spiTransceive(0) << 24;
+		two = (long)spiTransceive(0) << 16;
+		three = (long)spiTransceive(0) << 8;
+		four = (long)spiTransceive(0) << 0;
+		ENCODER_SS_0 = 1;
+		printf(" %d -- %d --- %d ----%d",one, two, three, four);
+		break;
+
+
 	}
 
+	return encValue;
 }

@@ -189,14 +189,19 @@ int main(){
 		break; //end of case GO_XY
 
 	case ENCODE:
+		printf(" a");
+		initSPI();
 		initEncoders();
+		long result = 0;
 		while(1){
-			printf(" Encoder countsm %d", EncoderCounts( 0 ));
+
+			printf(" Encoder counts: %d\n\r", EncoderCounts('L'));
+
 		}
 		break;
 
 	case ACCELERATE:
-		initAccel();
+		//initAccel();
 		while(1){
 			printf("Accel x %d", GetAccelerationH48C(0));
 		}
