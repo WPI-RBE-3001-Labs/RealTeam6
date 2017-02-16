@@ -20,7 +20,7 @@
 #define ACCELERATE 8
 #define STREAM 9
 
-#define MODE ENCODE
+#define MODE STREAM
 
 
 #define LINKTARGET 90
@@ -241,10 +241,12 @@ int main(){
 	case STREAM:
 		initSPI();
 		initEncoders();
-		initButtons();
 		initTimer(1, 2, 91);
+		setConst('L', KP+80, KI, KD);
+		setConst('H', KP+40, KI, KD);
 
 		while(1){
+			//homeArm();
 			gotoAngles(90, 0);
 			calcEncoder(0);
 			calcEncoder(1);

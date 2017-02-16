@@ -141,7 +141,7 @@ unsigned long getTimerCnt(){
 //	}
 //}
 
-void initTimer(unsigned char timer, int mode, unsigned char comp){
+void initTimer(int timer, int mode, unsigned int comp){
 	cli();
 	switch(timer){
 	case 0:
