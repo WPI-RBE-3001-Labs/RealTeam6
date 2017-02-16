@@ -75,7 +75,7 @@
 void initEncoder(char pos);
 void initEncoders();
 int EncoderCounts( char __chan );
-
+void calcEncoder(int link);
 
 
 #endif /* ENCODER_H_ */

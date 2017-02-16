@@ -25,7 +25,8 @@ ISR(TIMER0_COMPA_vect){
 
 ISR(TIMER1_COMPA_vect){
 	PIDFlag = 1;
-	encoderFlag = 1;
+	encoderOneFlag = 1;
+	encoderTwoFlag = 1;
 }
 
 unsigned long getTimerCnt(){

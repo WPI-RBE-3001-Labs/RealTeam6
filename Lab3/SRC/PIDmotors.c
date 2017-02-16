@@ -27,6 +27,17 @@ void stopSelect(int link){
 	}
 
 }
+/*
+ * @brief homes the arm and resets the encoder
+ */
+void homeArm(){
+	while(actErrorH >= 3 && actErrorL >= 3){
+	gotoAngles(90, 0);
+	}
+	//set the encoder variables to zero
+	encOne = 0;
+	encTwo = 0;
+}
 
 /*
  * @brief Drives the selected link in the desired direction at the desired speed
@@ -71,7 +82,7 @@ void driveLinkPID(int link, int pwr){
 void driveLinkPIDDir(int link,  int pwr){
 	switch (link){
 	case 0: //lower link
-		printf("    actErrorL: %d", actErrorL);
+		//printf("    actErrorL: %d", actErrorL);
 		if(actErrorL > 0){
 			setDAC(0, 0);
 			setDAC(1, pwr);
@@ -81,7 +92,7 @@ void driveLinkPIDDir(int link,  int pwr){
 		}
 	break;
 	case 1: //high link
-		printf("    actErrorH: %d", actErrorH);
+		//printf("    actErrorH: %d", actErrorH);
 		if( actErrorH > 0){
 			setDAC(2, 0);
 			setDAC(3, pwr);
@@ -94,4 +105,3 @@ void driveLinkPIDDir(int link,  int pwr){
 	}
 
 }
-

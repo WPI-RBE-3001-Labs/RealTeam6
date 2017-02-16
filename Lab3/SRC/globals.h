@@ -25,7 +25,13 @@ int lastPIDFlag;
 
 short button;
 
-short encoderFlag;
+short encoderOneFlag;
+short encoderTwoFlag;
+char firstAccelRead;
+
+signed int refReadX;
+signed int refReadY;
+signed int refReadZ;
 
 double ADC_90, ADC_0;
 
@@ -46,6 +52,8 @@ volatile double pidConstants[8];
 
 int ADCCheckAllChannels;
 
+long encOne, encTwo;
+
 #define LOWARMPOT 2
 #define HIGHARMPOT 3
 #define POT1 5
@@ -58,6 +66,7 @@ int ADCCheckAllChannels;
 
 double UPPER_LEN;
 double LOWER_LEN;
+
 
 void initGlobals();
 

@@ -15,14 +15,14 @@ void initEncoder(char pos){
 	switch(pos){
 
 	case 'H':
-		DDRC |= (1 << 5);
+		DDRC |= (1 << 4);
 		ENCODER_SS_1 = 0;
 		spiTransceive(CLR_CNTR);
 		ENCODER_SS_1 = 1;
 		_delay_ms(1);
 		ENCODER_SS_1 = 0;
 		spiTransceive(WRITE_MDR0);
-		spiTransceive(ONE_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
+		spiTransceive(FOUR_QUADRATURE_COUNT|FREE_RUNNING|DISABLE_INDEX);
 		ENCODER_SS_1 = 1;
 		_delay_ms(1);
 		ENCODER_SS_1 = 0;
@@ -32,7 +32,7 @@ void initEncoder(char pos){
 		break;
 
 	case 'L':
-		DDRC |= (1 << 4);
+		DDRC |= (1 << 5);
 		ENCODER_SS_0 = 0;
 		spiTransceive(CLR_CNTR);
 		ENCODER_SS_0 = 1;
@@ -63,32 +63,29 @@ void initEncoders(){
 	initEncoder('L');
 
 }
+
 int EncoderCounts( char __chan ){
-	//long encValue = 0;
+
 	long one, two;
 	one = 0;
 	two = 0;
+
 	if (__chan != 'H' && __chan != 'L') {
-		return -1; //Invalid channel
+		return 0; //Invalid channel
 	}
 	switch(__chan){
 
 	case 'H':
-
 		ENCODER_SS_1 = 0;
-		//printf("READY   ");
 		spiTransceive(READ_CNTR);
-		//printf("GO   ");
+
 		one = spiTransceive(0) << 8;
 		two = spiTransceive(0);
-		//printf("FINISH   ");
 		ENCODER_SS_1 = 1;
-		//_delay_ms(1);
+		_delay_ms(1);
 		ENCODER_SS_1 = 0;
 		spiTransceive(CLR_CNTR);
-		//printf("CLEAR   ");
 		ENCODER_SS_1 = 1;
-
 		break;
 
 	case 'L':
@@ -108,4 +105,24 @@ int EncoderCounts( char __chan ){
 	}
 
 	return (one|two);
+}
+
+void calcEncoder(int link){
+	switch(link){
+	case 0://low link
+		if(encoderOneFlag){
+			encOne += EncoderCounts('L');
+			encoderOneFlag = 0;
+			PIDFlag = 0;
+		}
+		break;
+
+	case 1://high link
+		if(encoderTwoFlag){
+			encTwo += EncoderCounts('H');
+			encoderTwoFlag = 0;
+			PIDFlag = 0;
+		}
+		break;
+	}
 }
