@@ -11,7 +11,6 @@
 void driveLinkPID(int link, int pwr);
 void driveLinkPIDDir(int link, int pwr);
 void stopSelect(int link);
-void homeArm();
 
 #endif /* SRC_PIDMOTORS_H_ */
 

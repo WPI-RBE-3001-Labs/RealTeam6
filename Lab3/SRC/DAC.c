@@ -1,11 +1,5 @@
 #include "RBELib/RBELib.h"
 
-/**
- * @brief Set the DAC to the given value on the chosen channel.
- * @param  DACn The channel that you want to set.
- * @param SPIVal The value you want to set it to.
- *
- */
 void setDAC(int DACn, int SPIval){
 
   //We need to send out 3 "packages" for configuring the DAC

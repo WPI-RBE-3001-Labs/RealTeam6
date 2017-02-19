@@ -26,8 +26,6 @@ void initGlobals(){
 	rampFlag = 0;
 	ADCCheckAllChannels = 0;
 	PIDFlag = 0;
-	encoderOneFlag = 0;
-	encoderTwoFlag = 0;
 	lastPIDFlag = 0;
 
 	ADCValues[0] = 0;
@@ -56,12 +54,5 @@ void initGlobals(){
 
 	UPPER_LEN = 4.25;
 	LOWER_LEN = 6;
-
-	firstAccelRead = 0;
-
-	refReadX = 10;
-
-	encOne = 0;
-	encTwo = 0;
 
 }

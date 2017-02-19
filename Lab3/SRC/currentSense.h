@@ -8,10 +8,21 @@
 #ifndef SRC_CURRENTSENSE_H_
 #define SRC_CURRENTSENSE_H_
 
-//initialize the current sensor associated with the specified motor
+/**
+ * @brief initialize the current sensor associated with the motor
+ *
+ * @param motor the motor affiliated with the channel on the current sensor
+ *
+ */
 void initCurrent(int motor);
 
-//Read from current sensor associated with the motor specified & return converted value
+/**
+ * @brief Gets the value from the current sensor associated with the motor
+ *
+ * @param motor the motor associated with the current sensor
+ *
+ * @return value the pre amplification and pre shifted current in mA
+ */
 
 float readCurrent(int motor);
 

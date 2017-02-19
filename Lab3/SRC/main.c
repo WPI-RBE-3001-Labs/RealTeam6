@@ -18,9 +18,8 @@
 #define GO_XY 6
 #define ENCODE 7
 #define ACCELERATE 8
-#define STREAM 9
 
-#define MODE STREAM
+//#define MODE ENCODE
 
 
 #define LINKTARGET 90
@@ -52,6 +51,7 @@ int main(){
 	initADC(POT2);
 	initADC(POT3);
 
+	int MODE=ENCODE;
 	switch(MODE){
 
 	case PRINT_POT:
@@ -122,7 +122,7 @@ int main(){
 			//calc what to send to motor
 			pidH = calcPID('H', LINKTARGET, ADCtoAngleH(getADC(HIGHARMPOT)) );
 
-			printf("     Motor Command, %ld,", pidH);
+			printf("     Motor Command, %d,", pidH);
 			printf("     Current, %f,\n\r", (double) readCurrent(1));
 
 			driveLinkPIDDir(1, pidH);
@@ -140,7 +140,7 @@ int main(){
 			//calc what to send to motor
 			pidL = calcPID('L', LINKTARGET, ADCtoAngleL(getADC(LOWARMPOT)) );
 
-			printf("     Motor Command, %ld,", pidL);
+			printf("     Motor Command, %d,", pidL);
 			printf("     Current, %f,\n\r", (double) readCurrent(0));
 
 			driveLinkPIDDir(0, pidL);
@@ -190,71 +190,25 @@ int main(){
 		break; //end of case GO_XY
 
 	case ENCODE:
+		printf(" a");
 		initSPI();
 		initEncoders();
-		//initButtons();
-		initTimer(1, 2, 91);
-		stopMotors();
+		long result = 0;
 		while(1){
-			//driveLinkPIDDir(0, 2047);
-			setDAC(2, 2047);
-			setDAC(3, 0);
-			stopSelect(0);
-			calcEncoder(1);
-			printf(" Encoder counts: %ld \n\r", encTwo);
-			checkButtons();
-			if(button == 4){ //+3V
-				printf("f");
-				setDAC(2, 2047);
-				setDAC(3, 0);
-				//driveLinkPIDDir(1, 2047);
-			} else if(button == 5){ //-3V
-				printf("u");
-				//setDAC(3, 2047);
-				//setDAC(2, 0);
-				driveLinkPIDDir(1, -2047);
-			} else if(button == 6){ //6V
-				printf("C");
-				//setDAC(2, 4095);
-				//setDAC(3, 0);
-				driveLinkPIDDir(1, 4095);
-			} else if(button == 7){ //0V
-				printf("K");
-				setDAC(2, 0);
-				setDAC(3, 0);
-			}
-			_delay_ms(1);
+
+			printf(" Encoder counts: %d\n\r", EncoderCounts('H'));
+
 		}
 		break;
 
 	case ACCELERATE:
-		initSPI();
-		initEncoders();
-		initButtons();
-		initTimer(1, 2, 91);
-
+		//initAccel();
 		while(1){
-			printf("Vref %d, Accel x %d\n\r", refReadX, GetAccelerationH48C(0));
+			printf("Accel x %d", GetAccelerationH48C(0));
 		}
 		break;
 
-	case STREAM:
-		initSPI();
-		initEncoders();
-		initTimer(1, 2, 91);
-		setConst('L', KP+80, KI, KD);
-		setConst('H', KP+40, KI, KD);
 
-		while(1){
-			//homeArm();
-			gotoAngles(90, 0);
-			calcEncoder(0);
-			calcEncoder(1);
-			printf("Low Angle, %f, High Angle, %f, Accel X, %d, Accel Y, %d, Accel Z, %d, EncoderL, %ld, EncoderH, %ld \n\r", ADCtoAngleH(getADC(LOWARMPOT)),
-					ADCtoAngleH(getADC(HIGHARMPOT)), GetAccelerationH48C(0), GetAccelerationH48C(2), GetAccelerationH48C(3), encOne, encTwo);
-
-		}
-		break;
 	}
 } //end of main
 

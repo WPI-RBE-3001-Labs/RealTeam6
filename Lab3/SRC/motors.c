@@ -29,13 +29,9 @@ void stopMotors(){
  * @todo Make a way to drive the links to a desired angle.
  */
 void gotoAngles(int lowerTheta, int upperTheta){
-	int lowPID, highPID;
 
-	lowPID = calcPID('L', lowerTheta, ADCtoAngleL(getADC(LOWARMPOT)));
-	driveLinkPIDDir(0, lowPID);
-
-	highPID = calcPID('H', upperTheta, ADCtoAngleH(getADC(HIGHARMPOT)));
-	driveLinkPIDDir(1, highPID);
+	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngleL(getADC(LOWARMPOT))));
+	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngleH(getADC(HIGHARMPOT))));
 
 }
 

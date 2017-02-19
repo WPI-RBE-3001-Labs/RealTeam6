@@ -12,8 +12,7 @@
  */
 void initButtons(){
 	//sets all of PortC to be inputs
-	DDRD &= 0b00000000;
-	PORTD |= 0b11110000;
+	DDRC &= 0b00000000;
 }
 
 /**
@@ -22,23 +21,23 @@ void initButtons(){
  * Checks starting at port 7 and works down
  */
 void checkButtons(){
-	//printf("button:  %d  \n\r", PINA);
-//	printf("button6:  %d  ", PINAbits._P6);
-//	printf("button5:  %d  ", PINAbits._P5);
-//	printf("button4:  %d  ", PINAbits._P4);
-	if (!PINDbits._P7){
+//	printf("button7:  %d  ", PINCbits._P7);
+//	printf("button6:  %d  ", PINCbits._P6);
+//	printf("button5:  %d  ", PINCbits._P5);
+//	printf("button4:  %d  ", PINCbits._P4);
+	if (!PINCbits._P7){
 		button = 7;
 
 	}
-	else if(!PINDbits._P6){
+	else if(!PINCbits._P6){
 		button = 6;
 
 	}
-	else if(!PINDbits._P5){
+	else if(!PINCbits._P5){
 		button = 5;
 
 	}
-	else if(!PINDbits._P4){
+	else if(!PINCbits._P4){
 		button = 4;
 	}
 	else{

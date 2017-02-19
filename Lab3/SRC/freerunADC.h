@@ -10,6 +10,8 @@
 
 /**
  * @brief inits the ADC to the given channel and sets the ADC to Free-run Mode with an interrupt firing when a conversion completes.
+ *
+ * @param channel the channel to initialize
  */
 void freeRunADC(int channel);
 
