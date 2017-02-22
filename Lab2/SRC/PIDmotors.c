@@ -43,11 +43,11 @@ void driveLinkPID(int link, int pwr){
 	switch (link){
 	case 0: //lower link
 		if(dir){
-			setDAC(0, 0);
-			setDAC(1, pwr);
-		} else {
 			setDAC(0, pwr);
 			setDAC(1, 0);
+		} else {
+			setDAC(0, 0);
+			setDAC(1, pwr);
 		}
 	break;
 	case 1: //high link
@@ -71,13 +71,12 @@ void driveLinkPID(int link, int pwr){
 void driveLinkPIDDir(int link,  int pwr){
 	switch (link){
 	case 0: //lower link
-		printf("    actErrorL: %d", actErrorL);
 		if(actErrorL > 0){
-			setDAC(0, 0);
-			setDAC(1, pwr);
-		} else if(actErrorL < 0){
 			setDAC(0, pwr);
 			setDAC(1, 0);
+		} else if(actErrorL < 0){
+			setDAC(0, 0);
+			setDAC(1, pwr);
 		}
 	break;
 	case 1: //high link

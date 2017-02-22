@@ -15,7 +15,7 @@ void printPotVal(){
 	double potmV = 0;
 
 	//save all values to things that can be used in a print function
-	potAngle = ADCtoAngleH(ADCvalue);
+	potAngle = ADCtoAngle(ADCvalue);
 	potmV = ADCtoMiliV(ADCvalue);
 	timeVal = timerCnt * 0.25;
 

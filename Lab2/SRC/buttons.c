@@ -21,26 +21,22 @@ void initButtons(){
  * Checks starting at port 7 and works down
  */
 void checkButtons(){
-//	printf("button7:  %d  ", PINCbits._P7);
-//	printf("button6:  %d  ", PINCbits._P6);
-//	printf("button5:  %d  ", PINCbits._P5);
-//	printf("button4:  %d  ", PINCbits._P4);
-	if (!PINCbits._P7){
+	if (PINC & 256){
 		button = 7;
 
 	}
-	else if(!PINCbits._P6){
+	else if(PINC & 128){
 		button = 6;
 
 	}
-	else if(!PINCbits._P5){
+	else if(PINC & 64){
 		button = 5;
 
 	}
-	else if(!PINCbits._P4){
+	else if(PINC & 16){
 		button = 4;
 	}
 	else{
-		button = 0;
+		button = 10;
 	}
 }

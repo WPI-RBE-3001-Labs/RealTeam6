@@ -6,7 +6,6 @@
  */
 #include "main.h"
 #include "RBELib/RBELib.h"
-#include <math.h>
 //#include "globals.h"
 
 #define PRINT_POT 0
@@ -15,12 +14,10 @@
 #define CURRENT_SENSE 3
 #define PID_CONTROL 4
 #define ARM_POSITION 5
-#define GO_XY 6
 
-#define MODE GO_XY
+#define MODE PID_CONTROL
 
-#define LINKTARGET 90
-#define LINKTARGET_2 45
+#define LINKTARGET 100
 
 
 /////BIT MASKS FOR DAC/////
@@ -112,78 +109,46 @@ int main(){
 			//@todo need to add feedforward to PID, shoudl just be a value added based off of gravity but im not sure how that works
 			//maybe we use the current sensor for that could be super wrong
 
+			//the following array values come from the board as they are stored in sequence from the ADC
+			//4-7 is analog in from pots
+			for(int i = 4; i <= 7; i++){
+				pidConstants[i] = ADCtoHundred(getADC(i));
+			}
 			setConst('H', KP, KI, KD);
-			printf("     Target, %d,", LINKTARGET);
-			printf("     Actual, %f,", ADCtoAngleH(getADC(HIGHARMPOT)));
+			printf("     Target: %d", LINKTARGET);
+			printf("     Actual: %f", ADCtoAngle(getADC(HIGHARMPOT)));
 			//calc what to send to motor
-			pidH = calcPID('H', LINKTARGET, ADCtoAngleH(getADC(HIGHARMPOT)) );
+			pidH = calcPID('H', LINKTARGET, ADCtoAngle(getADC(HIGHARMPOT)) );
 
-			printf("     Motor Command, %d,", pidH);
-			printf("     Current, %f,\n\r", (double) readCurrent(1));
+			printf("     Motor Command: %d", pidH);
+			printf("     Current: %f\n\r", (double) readCurrent(1));
 
 			driveLinkPIDDir(1, pidH);
-
-
 		}
 		break; //end of case PID_CONTROL
 
 	case ARM_POSITION:
 		initSPI();
+		initTimer(1,0,1439);
+
 		while(1){
-			setConst('L', KP, KI, KD);
-			printf("     Target, %d,", LINKTARGET);
-			printf("     Actual, %f,", ADCtoAngleL(getADC(LOWARMPOT)));
-			//calc what to send to motor
-			pidL = calcPID('L', LINKTARGET, ADCtoAngleL(getADC(LOWARMPOT)) );
+			if (PIDFlag == 1){
+				ADCValues[LOWARMPOT] = getADC(LOWARMPOT);
+				ADCValues[POT1] = getADC(POT1);
+				ADCValues[POT2] = getADC(POT2);
+				ADCValues[POT3] = getADC(POT3);
 
-			printf("     Motor Command, %d,", pidL);
-			printf("     Current, %f,\n\r", (double) readCurrent(0));
+				setConst('L',ADCValues[POT1],ADCValues[POT2],ADCValues[POT3]);
+				signed int Lpwr = calcPID('L',75,ADCtoAngle(ADCValues[LOWARMPOT]));
 
-			driveLinkPIDDir(0, pidL);
-		}
-		break; //end of case ARM_POSITION
+				driveLinkPID(0,Lpwr);
+				stopSelect(1);
 
-	case GO_XY:
-		initSPI();
-		initButtons();
-		int switches;
-		while(1){
-			switches = (PINCbits._P3 << 3) | (PINCbits._P2 << 2) | (PINCbits._P1 << 1) | (PINCbits._P0 << 0);
-			setConst('L', KP+80, KI, KD);
-			setConst('H', KP+40, KI, KD);
-			//printPos();
-			printf("Current lowA:  %f,  Current highA:  %f,  ", (double)(ADCtoAngleL(getADC(LOWARMPOT))), (double)ADCtoAngleH(getADC(HIGHARMPOT)));
-			printf("switches:  %d  \n\r", switches);
-			if(switches == 0){
-				driveLinkPID(0, calcPID('L', 42, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -18, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 1){
-				driveLinkPID(0, calcPID('L', 32, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -6, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 2){
-				driveLinkPID(0, calcPID('L', 26, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -3, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 3){
-				driveLinkPID(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 4, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 4){
-				driveLinkPID(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 20, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 5){
-				driveLinkPID(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 40, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 6){
-				driveLinkPID(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 59, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 7){
-				driveLinkPID(0, calcPID('L', 27, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 27, ADCtoAngleH(getADC(HIGHARMPOT))));
-			} else if(switches == 8){
-				driveLinkPID(0, calcPID('L', 37, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 0, ADCtoAngleH(getADC(HIGHARMPOT))));
+				printf("Kp: %d, Ki: %d, Kd: %d, Low Arm Pot: %f\n\r", ADCValues[POT1], ADCValues[POT2], ADCValues[POT3], ADCtoAngle(ADCValues[LOWARMPOT]));
+				PIDFlag = 0;
 			}
 		}
-		break; //end of case GO_XY
+		break; //end of case ARM_POSITION
 	}
 } //end of main
 
@@ -211,15 +176,4 @@ void ramp(){
 	}
 }
 
-void printPos(){
-	int lowerA, upperA;
-	float posX, posY;
 
-	lowerA = ADCtoAngleL(getADC(LOWARMPOT));
-	upperA = ADCtoAngleH(getADC(HIGHARMPOT));
-
-	posX = LOWER_LEN*cos(lowerA * M_PI/180) + UPPER_LEN*sin(lowerA * M_PI/180 + upperA* M_PI/180);
-	posY = LOWER_LEN*sin(lowerA * M_PI/180) - UPPER_LEN*cos(lowerA * M_PI/180 + upperA* M_PI/180);
-	printf("Current lowA:  %d,  Current highA:  %d,  ", lowerA, upperA);
-	printf("Current X:  %f,  Current Y:  %f, \n\r", (double)posX, (double)posY);
-}
