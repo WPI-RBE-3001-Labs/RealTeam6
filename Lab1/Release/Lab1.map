@@ -2,10 +2,10 @@ Archive member included because of file (symbol)
 
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o)
                               (vfprintf)
-C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
                               ./SRC/main.o (initRBELib)
-C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
-                              C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o) (initAltCom)
+C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+                              C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o) (initAltCom)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3.o)
                               ./SRC/main.o (__divsf3)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3x.o)
@@ -51,11 +51,11 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strn
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(fputc.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o) (fputc)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(iob.o)
-                              C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o) (__iob)
+                              C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o) (__iob)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(printf.o)
                               ./SRC/main.o (printf)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(sprintf.o)
-                              C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o) (sprintf)
+                              C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o) (sprintf)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libprintf_flt.a(vfprintf_flt.o) (__ultoa_invert)
 
@@ -96,7 +96,7 @@ LOAD ./SRC/globals.o
 LOAD ./SRC/main.o
 LOAD ./SRC/ports.o
 LOAD ./SRC/timer.o
-LOAD C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a
+LOAD C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
@@ -286,8 +286,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .text          0x000001bc        0x0 ./SRC/main.o
  .text          0x000001bc        0x0 ./SRC/ports.o
  .text          0x000001bc        0x0 ./SRC/timer.o
- .text          0x000001bc        0x0 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
- .text          0x000001bc        0x0 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+ .text          0x000001bc        0x0 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+ .text          0x000001bc        0x0 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
  .text          0x000001bc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3.o)
  .text          0x000001bc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3x.o)
  .text          0x000001bc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(floatsisf.o)
@@ -398,22 +398,22 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00000f90        0x2 ./SRC/timer.o
                 0x00000f90                setCompValue
  .text.initRBELib
-                0x00000f92       0x1a C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+                0x00000f92       0x1a C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
                 0x00000f92                initRBELib
  .text.printfRBE
-                0x00000fac        0xa C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+                0x00000fac        0xa C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
                 0x00000fac                printfRBE
  .text.initAltCom
-                0x00000fb6       0x38 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+                0x00000fb6       0x38 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
                 0x00000fb6                initAltCom
  .text.setCharDebug
-                0x00000fee       0x10 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+                0x00000fee       0x10 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
                 0x00000fee                setCharDebug
  .text.coPrintf
-                0x00000ffe       0x1a C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+                0x00000ffe       0x1a C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
                 0x00000ffe                coPrintf
  .text.setServo
-                0x00001018       0x84 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+                0x00001018       0x84 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
                 0x00001018                setServo
  .text.avr-libc.fplib
                 0x0000109c        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3.o)
@@ -525,8 +525,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .data          0x00800100       0x52 ./SRC/main.o
  .data          0x00800152        0x0 ./SRC/ports.o
  .data          0x00800152        0x0 ./SRC/timer.o
- .data          0x00800152        0x0 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
- .data          0x00800152       0x14 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+ .data          0x00800152        0x0 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+ .data          0x00800152       0x14 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
  .data          0x00800166        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3.o)
  .data          0x00800166        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3x.o)
  .data          0x00800166        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(floatsisf.o)
@@ -563,7 +563,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .data.initializer
                 0x0080016a        0x2 ./SRC/freerunADC.o
                 0x0080016a                initializer
- .data.RBEOut   0x0080016c        0xe C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+ .data.RBEOut   0x0080016c        0xe C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
  *(.rodata)
  *(.rodata*)
  .rodata.validBauds.1673
@@ -585,8 +585,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .bss           0x008001b2        0x0 ./SRC/main.o
  .bss           0x008001b2        0x0 ./SRC/ports.o
  .bss           0x008001b2        0x0 ./SRC/timer.o
- .bss           0x008001b2        0x0 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
- .bss           0x008001b2        0x0 C:\Users\jltai\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
+ .bss           0x008001b2        0x0 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(Debug.o)
+ .bss           0x008001b2        0x0 C:\Users\nbeeten\git\rbelib\RBELib\Release\libRBELib.a(SetServo.o)
  .bss           0x008001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3.o)
  .bss           0x008001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(divsf3x.o)
  .bss           0x008001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libm.a(floatsisf.o)
