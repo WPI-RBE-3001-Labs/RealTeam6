@@ -25,4 +25,10 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>de.innot.avreclipse.core.avrnature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>RBELib</name>
+			<value>file:/C:/Users/jltai/git/rbelib/RBELib</value>
+		</variable>
+	</variableList>
 </projectDescription>
