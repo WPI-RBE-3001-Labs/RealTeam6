@@ -10,6 +10,9 @@ unsigned int Enable_Interrupts = (1 << ADIE);
 unsigned int Conv_Start = (1 << ADSC);
 unsigned int initializer = (1 << ADIE)|(1 << ADSC);
 
+/**
+ * @brief inits the ADC to the given channel and sets the ADC to Free-run Mode with an interrupt firing when a conversion completes.
+ */
 void freeRunADC(int channel){
 
 	//disable the global interrupt while the ADC sets up

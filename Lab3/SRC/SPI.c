@@ -13,6 +13,9 @@
  * @brief Initializes the SPI bus for communication with all of your
  * SPI devices.
  *
+ * @todo Create the function that will allow you to initialize the SPI
+ * in a mode compatible with all devices.  Do not forget to deassert all
+ * of your SS lines!
  */
 void initSPI(){
 	PRR = 0;
@@ -29,9 +32,9 @@ void initSPI(){
 
 	SPCR |= (1 << SPE) |  (1<<MSTR) | (1 << SPR1) | (1 << SPR0); // Enable SPI, set as master, set SCK freq, oscillation frequency/128
 
-	SPSR &= ~(1 << SPI2X);
+	SPSR &= ~(0 << SPI2X);
 
-
+	PORTAbits._P6 = 1; //set the acellerometer ss to high
 //	spiTransceive(0b01101111);
 //	spiTransceive(0);
 //	spiTransceive(0);
@@ -45,7 +48,7 @@ void initSPI(){
  * back even if it is junk data.
  *
  * @param data The byte to send down the SPI bus.
- * @return dataIn The byte shifted in during transmit
+ * @return value The byte shifted in during transmit
  *
  */
 unsigned char spiTransceive(BYTE data){
