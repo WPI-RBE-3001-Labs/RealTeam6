@@ -10,8 +10,7 @@
 
 
 double ADCtoMiliV(unsigned int potVal);
-double ADCtoAngleH(unsigned int potVal);
-double ADCtoAngleL(unsigned int potVal);
+double ADCtoAngle(unsigned int potVal);
 double ADCtoHundred(unsigned int potVal);
 
 #endif /* SRC_ADCCALC_H_ */

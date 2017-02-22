@@ -32,7 +32,7 @@ float readCurrent(int motor){
 	}
 
 	//convert the ADC value to a voltage
-	voltageRead = ADCval * 5/((2^10)); //5V range divided by the number of bits
+	voltageRead = ADCval * 5/((2^10) - 1); //5V range divided by the number of bits
 	//shift the out put down by -2.5V to cancel out the  current shift
 	voltageRead -= 392;
 

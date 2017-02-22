@@ -8,7 +8,6 @@
  */
 
 #include "main.h"
-#include "RBELib/RBELib.h"
 
 /**
  * @brief Initializes the ADC and make one channel active.

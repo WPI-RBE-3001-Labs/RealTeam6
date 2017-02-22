@@ -27,6 +27,5 @@
 int returnBITS();
 void ramp();
 
-void printPos();
 
 #endif /* SRC_MAIN_H_ */

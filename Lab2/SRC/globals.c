@@ -52,7 +52,5 @@ void initGlobals(){
 	errorH = 0;
 	errorL = 0;
 
-	UPPER_LEN = 4.25;
-	LOWER_LEN = 6;
 
 }
