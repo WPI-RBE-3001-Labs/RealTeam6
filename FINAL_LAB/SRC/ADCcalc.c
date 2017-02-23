@@ -18,7 +18,6 @@ double ADCtoMiliV(unsigned int potVal){
 	return ((double) potVal)/MAX_ADC*5000;
 }
 
-
 /**
  * @brief converts the 10 bit adc value to the pot angle
  *
