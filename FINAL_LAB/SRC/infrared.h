@@ -14,5 +14,7 @@ int IR2;
 
 void initInfra();
 void readInfra();
+void storeDistance(int sensor);
+double calcInfraAvg(int sensor);
 
 #endif /* SRC_INFRARED_H_ */

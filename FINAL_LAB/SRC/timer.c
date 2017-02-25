@@ -23,11 +23,14 @@ ISR(TIMER0_COMPA_vect){
 	PWMTimerCnt++;
 }
 
-//ISR(TIMER1_COMPA_vect){
-//	PIDFlag = 1;
-//	encoderOneFlag = 1;
-//	encoderTwoFlag = 1;
-//}
+
+ISR(TIMER1_COMPA_vect){
+	PIDFlag = 1;
+	encoderOneFlag = 1;
+	encoderTwoFlag = 1;
+	infraOneFlag = 1;
+	infraTwoFlag = 1;
+}
 
 
 

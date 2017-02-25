@@ -30,6 +30,12 @@ void initGlobals(){
 	encoderTwoFlag = 0;
 	lastPIDFlag = 0;
 
+	infraOneFlag = 0;
+	infraTwoFlag = 0;
+
+	infraOneDataFlag = 0;
+	infraTwoDataFlag = 0;
+
 	ADCValues[0] = 0;
 	ADCValues[1] = 0;
 	ADCValues[2] = 0;
@@ -64,4 +70,12 @@ void initGlobals(){
 	encOne = 0;
 	encTwo = 0;
 
+	IR1_1 = 100;
+	IR1_2 = 100;
+	IR1_3 = 100;
+
+
+	IR2_1 = 100;
+	IR2_2 = 100;
+	IR2_3 = 100;
 }

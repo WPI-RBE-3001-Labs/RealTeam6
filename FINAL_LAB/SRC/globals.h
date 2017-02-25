@@ -27,6 +27,12 @@ short button;
 
 short encoderOneFlag;
 short encoderTwoFlag;
+
+short infraOneFlag;
+short infraTwoFlag;
+short infraOneDataFlag;
+short infraTwoDataFlag;
+
 char firstAccelRead;
 
 signed int refReadX;
@@ -69,6 +75,15 @@ double LOWER_LEN;
 
 double Dis1;
 double Dis2;
+
+double IR1_1;
+double IR1_2;
+double IR1_3;
+
+double IR2_1;
+double IR2_2;
+double IR2_3;
+
 
 void initGlobals();
 

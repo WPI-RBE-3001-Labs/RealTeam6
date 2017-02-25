@@ -20,8 +20,10 @@
 #define ACCELERATE 8
 #define STREAM 9
 #define INFRARED 10
+#define SERVOS 11
+#define TEST 12
 
-#define MODE INFRARED
+#define MODE SERVOS
 
 
 #define LINKTARGET 90
@@ -34,6 +36,7 @@
 #define ADDRESS_A 0b0001
 #define ADDRESS_B 0b0010
 #define ADDRESS_ALL 0b1111
+
 
 
 
@@ -269,8 +272,33 @@ int main(){
 			printf("IR1,  %f,  IR2, %f\n\r", Dis1, Dis2);
 		}
 
-		break;
+		break; //end of case INFRARED
+
+	case SERVOS:
+		while(1){
+			setServo(0, 60);
+			setServo(1, 0);
+		}
+		break;//end of case SERVOS
 	}
+
+	case TEST:
+		while(1){
+			//TODO add functions for servo operations
+			readInfra();
+			storeDistance();
+			if(calcInfraAvg(1) <= 18){
+				printf("Block in First IR!/n/r");
+			}
+			if(calcInfraAvg(2) <= 18){
+				printf("Block in First IR!/n/r");
+			}
+
+		}
+
+
+		break;//end of case TEST
+
 } //end of main
 
 
