@@ -24,7 +24,7 @@
 #define TEST_BELT 12
 #define TEST_ARMXY 13
 
-#define MODE GO_XY
+#define MODE ARM_POSITION
 
 
 #define LINKTARGET 90
@@ -122,16 +122,16 @@ int main(){
 			//maybe we use the current sensor for that could be super wrong
 
 			setConst('H', KP, KI, KD);
+			double ArmAngle = ADCtoAngleH(getADC(HIGHARMPOT));
 			printf("     Target, %d,", LINKTARGET);
-			printf("     Actual, %f,", ADCtoAngleH(getADC(HIGHARMPOT)));
+			printf("     Actual, %f,", ArmAngle);
 			//calc what to send to motor
-			pidH = calcPID('H', LINKTARGET, ADCtoAngleH(getADC(HIGHARMPOT)) );
+			pidH = calcPID('H', LINKTARGET, ArmAngle);
 
 			printf("     Motor Command, %ld,", pidH);
 			printf("     Current, %f,\n\r", (double) readCurrent(1));
 
 			driveLinkPIDDir(1, pidH);
-
 
 		}
 		break; //end of case PID_CONTROL
@@ -140,10 +140,10 @@ int main(){
 		initSPI();
 		while(1){
 			setConst('L', KP, KI, KD);
-			printf("     Target, %d,", LINKTARGET);
+			printf("     Target, %d,", LINKTARGET_2);
 			printf("     Actual, %f,", ADCtoAngleL(getADC(LOWARMPOT)));
 			//calc what to send to motor
-			pidL = calcPID('L', LINKTARGET, ADCtoAngleL(getADC(LOWARMPOT)) );
+			pidL = calcPID('L', LINKTARGET_2, ADCtoAngleL(getADC(LOWARMPOT)) );
 
 			printf("     Motor Command, %ld,", pidL);
 			printf("     Current, %f,\n\r", (double) readCurrent(0));
@@ -164,32 +164,32 @@ int main(){
 			printf("Current lowA:  %f,  Current highA:  %f,  ", (double)(ADCtoAngleL(getADC(LOWARMPOT))), (double)ADCtoAngleH(getADC(HIGHARMPOT)));
 			printf("switches:  %d  \n\r", switches);
 			if(switches == 0){
-				driveLinkPID(0, calcPID('L', 42, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -18, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 42, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', -18, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 1){
-				driveLinkPID(0, calcPID('L', 32, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -6, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 32, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', -6, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 2){
-				driveLinkPID(0, calcPID('L', 26, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', -3, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 26, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', -3, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 3){
-				driveLinkPID(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 4, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 4, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 4){
-				driveLinkPID(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 20, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 20, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 5){
-				driveLinkPID(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 40, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 17, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 40, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 6){
-				driveLinkPID(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 59, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 14, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 59, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 7){
-				driveLinkPID(0, calcPID('L', 27, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 27, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 27, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 27, ADCtoAngleH(getADC(HIGHARMPOT))));
 			} else if(switches == 8){
-				driveLinkPID(0, calcPID('L', 37, ADCtoAngleL(getADC(LOWARMPOT))));
-				driveLinkPID(1, calcPID('H', 0, ADCtoAngleH(getADC(HIGHARMPOT))));
+				driveLinkPIDDir(0, calcPID('L', 37, ADCtoAngleL(getADC(LOWARMPOT))));
+				driveLinkPIDDir(1, calcPID('H', 0, ADCtoAngleH(getADC(HIGHARMPOT))));
 			}
 		}
 		break; //end of case GO_XY
