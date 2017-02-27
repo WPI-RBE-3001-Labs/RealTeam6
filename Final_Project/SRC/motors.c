@@ -29,9 +29,9 @@ void stopMotors(){
  */
 void gotoAngles(int lowerTheta, int upperTheta){
 
-	driveLinkPID(0, calcPID('L', lowerTheta, ADCtoAngleL(getADC(LOWARMPOT))));
+	driveLinkPIDDir(0, calcPID('L', lowerTheta, ADCtoAngleL(getADC(LOWARMPOT))));
 
-	driveLinkPID(1, calcPID('H', upperTheta, ADCtoAngleH(getADC(HIGHARMPOT))));
+	driveLinkPIDDir(1, calcPID('H', upperTheta, ADCtoAngleH(getADC(HIGHARMPOT))));
 
 }
 
