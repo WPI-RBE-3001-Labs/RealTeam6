@@ -25,14 +25,13 @@ ISR(TIMER0_COMPA_vect){
 
 
 ISR(TIMER1_COMPA_vect){
-
-	PIDFlag = 1;
+	PIDHFlag = 1;
+	PIDLFlag = 1;
 	encoderOneFlag = 1;
 	encoderTwoFlag = 1;
 	infraOneFlag = 1;
 	infraTwoFlag = 1;
 }
-
 
 
 

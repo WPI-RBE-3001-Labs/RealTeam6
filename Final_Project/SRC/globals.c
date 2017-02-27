@@ -19,16 +19,25 @@ void initGlobals(){
 	button = 6;
 	output = 0;
 	Thigh = 0;
-	ADC_90 = 600;
-	ADC_0 = 228;
+
+	ADCH_90 = 255;
+	ADCH_0 = 667;
+	ADCL_90 = 617;
+	ADCL_0 = 256;
+
 	DAC_VALUE_A = 0;
 	DAC_VALUE_B = 2047;
 	rampFlag = 0;
 	ADCCheckAllChannels = 0;
-	PIDFlag = 0;
+
+	//PID stuff
+	PIDHFlag = 0;
+	PIDLFlag = 0;
 	encoderOneFlag = 0;
 	encoderTwoFlag = 0;
 	lastPIDFlag = 0;
+	PIDHCalc = 0;
+	PIDLCalc = 0;
 
 	infraOneFlag = 0;
 	infraTwoFlag = 0;
@@ -60,8 +69,10 @@ void initGlobals(){
 	errorH = 0;
 	errorL = 0;
 
-	UPPER_LEN = 4.25;
+	//Arm Lengths
+	UPPER_LEN = 6;
 	LOWER_LEN = 6;
+	GNDDIST = 5.5;
 
 	firstAccelRead = 0;
 

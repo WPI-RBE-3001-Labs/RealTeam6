@@ -20,8 +20,13 @@ unsigned int DAC_VALUE_A;
 unsigned int DAC_VALUE_B;
 int output;
 int rampFlag;
-int PIDFlag;
+
+//PID Stuff
+int PIDHFlag;
+int PIDLFlag;
 int lastPIDFlag;
+signed int PIDHCalc;
+signed int PIDLCalc;
 
 short button;
 
@@ -39,7 +44,7 @@ signed int refReadX;
 signed int refReadY;
 signed int refReadZ;
 
-double ADC_90, ADC_0;
+double ADCH_90, ADCH_0, ADCL_90, ADCL_0;
 
 //PID
 int errorH;
@@ -72,6 +77,7 @@ long encOne, encTwo;
 
 double UPPER_LEN;
 double LOWER_LEN;
+double GNDDIST;
 
 double Dis1;
 double Dis2;

@@ -113,7 +113,7 @@ void calcEncoder(int link){
 		if(encoderOneFlag){
 			encOne += EncoderCounts('L');
 			encoderOneFlag = 0;
-			PIDFlag = 0;
+			PIDLFlag = 0;
 		}
 		break;
 
@@ -121,7 +121,7 @@ void calcEncoder(int link){
 		if(encoderTwoFlag){
 			encTwo += EncoderCounts('H');
 			encoderTwoFlag = 0;
-			PIDFlag = 0;
+			PIDHFlag = 0;
 		}
 		break;
 	}

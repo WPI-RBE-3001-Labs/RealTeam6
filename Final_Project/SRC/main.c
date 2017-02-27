@@ -24,11 +24,11 @@
 #define TEST_BELT 12
 #define TEST_ARMXY 13
 
-#define MODE ARM_POSITION
+#define MODE TEST_ARMXY
 
 
-#define LINKTARGET 90
-#define LINKTARGET_2 45
+#define LINKTARGET 60
+#define LINKTARGET_2 90
 
 
 /////BIT MASKS FOR DAC/////
@@ -294,6 +294,8 @@ int main(){
 	case TEST_BELT:
 		initTimer(1, 2, 91);
 		setServo(7, -255);//start the belt, a negative value makes it got the right way
+		//^^^^turn into seperate function
+
 		while(1){
 			//TODO add functions for servo operations
 
@@ -310,28 +312,29 @@ int main(){
 			}
 
 		}
-
-
 		break;//end of case TEST belt
+
 	case TEST_ARMXY:
+		//init the SPI for serial communication
 		initSPI();
-		initEncoders();
+
+
 		initTimer(1, 2, 91);
+
+		//init PID Constants
 		setConst('L', KP+80, KI, KD);
 		setConst('H', KP+40, KI, KD);
+
 		while(1){
-			gotoAngles(0,0);
+			//printPos();
+			gotoXY(10,5);
 		}
 
-	break; //end of  test arm XY
+	break; //end of TEST_ARMXY
 	}
+
 } //end of main
 
-
-
-int returnBITS(){
-	return ADMUX;
-}
 
 void ramp(){
 	if((DAC_VALUE_A < 4095) && rampFlag == 0){
@@ -351,15 +354,3 @@ void ramp(){
 	}
 }
 
-void printPos(){
-	int lowerA, upperA;
-	float posX, posY;
-
-	lowerA = ADCtoAngleL(getADC(LOWARMPOT));
-	upperA = ADCtoAngleH(getADC(HIGHARMPOT));
-
-	posX = LOWER_LEN*cos(lowerA * M_PI/180) + UPPER_LEN*sin(lowerA * M_PI/180 + upperA* M_PI/180);
-	posY = LOWER_LEN*sin(lowerA * M_PI/180) - UPPER_LEN*cos(lowerA * M_PI/180 + upperA* M_PI/180);
-	printf("Current lowA:  %d,  Current highA:  %d,  ", lowerA, upperA);
-	printf("Current X:  %f,  Current Y:  %f, \n\r", (double)posX, (double)posY);
-}

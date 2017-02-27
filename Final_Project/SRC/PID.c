@@ -34,7 +34,7 @@ void setConst(char link, float Kp, float Ki, float Kd){
 }
 
 /**
- * @brief Calculate the PID value.
+ * @brief Calculate the PID value based upon the interrupt flags we create from Timer 1 CTC ISR.
  * @todo add feed forward
  * @param  link Which link to calculate the error for (Use 'U' and 'L').
  * @param setPoint The desired position of the link.
@@ -48,39 +48,53 @@ signed int calcPID(char link, int setPoint, int actPos){
 
 	if(link == 'H'){
 
-		actErrorH = setPoint - actPos; //sets the actual error of the upper link
+		if(PIDHFlag){
 
-		errorH = errorH + actErrorH;
-		pTerm = pidConsts.Kp_H * actErrorH;
-		iTerm = pidConsts.Ki_H/10 * errorH;
-		if(iTerm > 50){
-			iTerm = 50;
+			actErrorH = setPoint - actPos; //sets the actual error of the upper link
+
+			errorH = errorH + actErrorH;
+			pTerm = pidConsts.Kp_H * actErrorH;
+			iTerm = pidConsts.Ki_H/10 * errorH;
+			if(iTerm > 50){
+				iTerm = 50;
+			}
+			//iTerm = 0;
+			dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
+			//dTerm = 0;
+
+			preErrorH = actErrorH;
+
+			PIDHCalc = pTerm + iTerm + dTerm;
+
+			PIDHFlag = 0;
 		}
-		//iTerm = 0;
-		dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
-		//dTerm = 0;
 
-		preErrorH = actErrorH;
+		return PIDHCalc;
 
 	} else {
 
-		actErrorL = setPoint - actPos; //sets the actual error of the upper link
+		if(PIDLFlag){
 
-		errorL = errorL + actErrorL;
-		pTerm = pidConsts.Kp_L * actErrorL;
-		iTerm = pidConsts.Ki_L/10 * errorL;
-		if(iTerm > 50){
-			iTerm = 50;
+			actErrorL = setPoint - actPos; //sets the actual error of the upper link
+
+			errorL = errorL + actErrorL;
+			pTerm = pidConsts.Kp_L * actErrorL;
+			iTerm = pidConsts.Ki_L/10 * errorL;
+			if(iTerm > 50){
+				iTerm = 50;
+			}
+			//iTerm = 0;
+			dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
+			//dTerm = 0;
+
+			preErrorL = actErrorL;
+
+			PIDLCalc = pTerm + iTerm + dTerm;
+
+			PIDLFlag = 0;
 		}
-		//iTerm = 0;
-		dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
-		//dTerm = 0;
 
-		preErrorL = actErrorL;
+		return PIDLCalc;
 
 	}
-
-
-	return pTerm + iTerm + dTerm ;
-
 }
