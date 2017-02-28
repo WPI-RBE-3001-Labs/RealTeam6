@@ -30,6 +30,8 @@
 int returnBITS();
 void ramp();
 
-void printPos();
+void runBelt();
+void openClaw();
+void closeClaw();
 
 #endif /* SRC_MAIN_H_ */

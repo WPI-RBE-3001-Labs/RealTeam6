@@ -14,7 +14,7 @@ int IR2;
 
 void initInfra();
 void readInfra();
-void storeDistance(int sensor);
+void storeDistance();
 double calcInfraAvg(int sensor);
 double calcBeltPos(double irVal);
 

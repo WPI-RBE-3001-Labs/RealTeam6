@@ -34,16 +34,18 @@ void readInfra(){
 	}
 }
 
-void storeDistance(int sensor){
-	if(sensor == 1 && infraOneDataFlag){
+void storeDistance(){
+	readInfra();
+	if(infraOneDataFlag){
 		IR1_3 = IR1_2;
 		IR1_2 = IR1_1;
-		IR1_1 = IR1;
+		IR1_1 = ADCtoDistance(IR1);
 		infraOneDataFlag = 0;
-	} else if (sensor == 2 && infraTwoDataFlag){
+	}
+	if (infraTwoDataFlag){
 		IR2_3 = IR2_2;
 		IR2_2 = IR2_1;
-		IR2_1 = IR2;
+		IR2_1 = ADCtoDistance(IR2);
 		infraTwoDataFlag = 0;
 	}
 }

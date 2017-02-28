@@ -100,5 +100,5 @@ void driveLink(int link, int dir){
  * @todo Drive the arm to a known position using the potentiometers.
  */
 void homePos(){
-
+	gotoAngles(90,-90);
 }

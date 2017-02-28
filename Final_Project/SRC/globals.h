@@ -79,9 +79,9 @@ double UPPER_LEN;
 double LOWER_LEN;
 double GNDDIST;
 
-double Dis1;
-double Dis2;
 
+
+//Final Project Flags and Variables
 double IR1_1;
 double IR1_2;
 double IR1_3;
@@ -89,6 +89,11 @@ double IR1_3;
 double IR2_1;
 double IR2_2;
 double IR2_3;
+
+double Dis1;
+double Dis2;
+
+int IN_PROGRESS;
 
 
 void initGlobals();

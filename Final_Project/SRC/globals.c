@@ -81,6 +81,10 @@ void initGlobals(){
 	encOne = 0;
 	encTwo = 0;
 
+	//Final Project Flags and Variables
+
+	IN_PROGRESS = 0;
+
 	IR1_1 = 100;
 	IR1_2 = 100;
 	IR1_3 = 100;
@@ -89,4 +93,5 @@ void initGlobals(){
 	IR2_1 = 100;
 	IR2_2 = 100;
 	IR2_3 = 100;
+
 }

@@ -9,24 +9,33 @@
 #include <math.h>
 //#include "globals.h"
 
-#define PRINT_POT 0
+
 #define TRIANGLE_WAVE 1
 #define ARM_DRIVE 2
 #define CURRENT_SENSE 3
 #define PID_CONTROL 4
 #define ARM_POSITION 5
 #define GO_XY 6
-#define ENCODE 7
-#define ACCELERATE 8
 #define STREAM 9
 #define INFRARED 10
 #define SERVOS 11
 #define TEST_BELT 12
 #define TEST_ARMXY 13
+#define FINAL_RUN 14
 
 #define MODE TEST_ARMXY
 
+//define states for FINAL_RUN state machine
+#define DETECT_BLOCK 1
+#define WAIT_FOR_BLOCK 2
+#define GRAB_BLOCK 3
+#define WEIGH_BLOCK 4
+#define DROP_LIGHT_BLOCK 5
+#define DROP_HEAVY_BLOCK 6
 
+int FINAL_RUN_STATE = DETECT_BLOCK;
+
+//link targets for PID Testing
 #define LINKTARGET 60
 #define LINKTARGET_2 90
 
@@ -58,20 +67,6 @@ int main(){
 	initADC(POT3);
 
 	switch(MODE){
-
-	case PRINT_POT:
-		//print command to tell user what to do
-		printf("%s", "  Press any letter to start recording data  ");
-
-		while(getCharDebug() != 0x00){
-			//start timer 1 (rest numbers don't currently mean anything...awk...)
-			initTimer(1, 1, 1);
-			while(1){
-				//prints pot values needed for part 1
-				printPotVal();
-			}
-		}
-		break; //end of case PRINT_POT
 
 	case TRIANGLE_WAVE:
 		//print command to tell user what to do
@@ -194,55 +189,6 @@ int main(){
 		}
 		break; //end of case GO_XY
 
-	case ENCODE:
-		initSPI();
-		initEncoders();
-		//initButtons();
-		initTimer(1, 2, 91);
-		stopMotors();
-		while(1){
-			//driveLinkPIDDir(0, 2047);
-			setDAC(2, 2047);
-			setDAC(3, 0);
-			stopSelect(0);
-			calcEncoder(1);
-			printf(" Encoder counts: %ld \n\r", encTwo);
-			checkButtons();
-			if(button == 4){ //+3V
-				printf("d");
-				setDAC(2, 2047);
-				setDAC(3, 0);
-				//driveLinkPIDDir(1, 2047);
-			} else if(button == 5){ //-3V
-				printf("u");
-				//setDAC(3, 2047);
-				//setDAC(2, 0);
-				driveLinkPIDDir(1, -2047);
-			} else if(button == 6){ //6V
-				printf("C");
-				//setDAC(2, 4095);
-				//setDAC(3, 0);
-				driveLinkPIDDir(1, 4095);
-			} else if(button == 7){ //0V
-				printf("K");
-				setDAC(2, 0);
-				setDAC(3, 0);
-			}
-			_delay_ms(1);
-		}
-		break;
-
-	case ACCELERATE:
-		initSPI();
-		initEncoders();
-		initButtons();
-		initTimer(1, 2, 91);
-
-		while(1){
-			printf("Vref %d, Accel x %d\n\r", refReadX, GetAccelerationH48C(0));
-		}
-		break;
-
 	case STREAM:
 		initSPI();
 		initEncoders();
@@ -293,12 +239,10 @@ int main(){
 
 	case TEST_BELT:
 		initTimer(1, 2, 91);
-		setServo(7, -255);//start the belt, a negative value makes it got the right way
-		//^^^^turn into seperate function
+		runBelt();
+
 
 		while(1){
-			//TODO add functions for servo operations
-
 			storeDistance(1); //Run this first to store last value
 			storeDistance(2);
 			readInfra(); //then run this to get the new one
@@ -306,7 +250,7 @@ int main(){
 			if(calcInfraAvg(1) >= 340){
 				printf("Block in First IR! \n\r");
 			} else if(calcInfraAvg(2) >= 340){
- 				printf("Block in Second IR! \n\r");
+				printf("Block in Second IR! \n\r");
 			} else {
 				printf("beep boop. nothing here boss\n\r");
 			}
@@ -330,9 +274,86 @@ int main(){
 			gotoXY(10,5);
 		}
 
-	break; //end of TEST_ARMXY
-	}
+		break; //end of TEST_ARMXY
 
+	case FINAL_RUN:
+
+		initSPI();
+		initInfra();
+		initTimer(1, 2, 91);
+
+		runBelt();
+
+		while(1){
+
+			switch(FINAL_RUN_STATE){
+
+			case DETECT_BLOCK:
+				//set PID constants for this state
+				setConst('L', KP+90, KI, KD);
+				setConst('H', KP+40, KI, KD);
+
+				//home the arm in prep for rest of run
+				homePos();
+
+				if(calcInfraAvg(1) <= 18 && IN_PROGRESS == 0){
+
+					Dis1 = calcInfraAvg(1);
+
+					IN_PROGRESS = 1;
+
+					FINAL_RUN_STATE = WAIT_FOR_BLOCK;
+
+				}
+				break; //end of DETECT_BLOCK
+
+			case WAIT_FOR_BLOCK:
+				//set PID constants for this state
+				setConst('L', KP+90, KI, KD);
+				setConst('H', KP+40, KI, KD);
+
+				if(Dis1 <= 5 && Dis1 >= 2){
+
+				} else if(Dis1 <= 5 && Dis1 >= 2){
+
+				} else if(Dis1 <= 5 && Dis1 >= 2){
+
+				} else if(Dis1 <= 5 && Dis1 >= 2){
+
+				} else {
+
+				}
+				if(calcInfraAvg(2) <= 18 && IN_PROGRESS == 1){
+
+					_delay_ms(500);
+
+					FINAL_RUN_STATE = GRAB_BLOCK;
+
+				}
+
+				break; //end of WAIT_FOR_BLOCK
+
+			case GRAB_BLOCK:
+
+				break; //end of GRAB_BLOCK
+
+			case WEIGH_BLOCK:
+
+				break; //end of WEIGH_BLOCK
+
+			case DROP_LIGHT_BLOCK:
+
+				break; //end of DROP_LIGHT_BLOCK
+
+			case DROP_HEAVY_BLOCK:
+
+				break; //end of DROP_HEAVY_BLOCK
+
+			}//end of FINAL_RUN_STATE switch case
+
+			break; //end of FINAL_RUN
+		}
+	}
 } //end of main
 
 
@@ -353,4 +374,19 @@ void ramp(){
 		rampFlag = 0;
 	}
 }
+
+void runBelt(){
+	setServo(7, -255);//start the belt, a negative value makes it got the right way
+}
+
+void openClaw(){
+	//TODO find proper value to set that has claw open
+	setServo(6, -255);
+}
+
+void closeClaw(){
+	//TODO find proper value to set that has claw closed
+	setServo(6, 255);
+}
+
 
