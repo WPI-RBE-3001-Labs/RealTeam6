@@ -6,7 +6,7 @@
  */
 #include "RBELib/RBELib.h"
 #include "globals.h"
-
+#include "math.h"
 
 /**
  * @brief Sets the Kp, Ki, and Kd values for 1 link.
@@ -55,17 +55,25 @@ signed int calcPID(char link, int setPoint, int actPos){
 			errorH = errorH + actErrorH;
 			pTerm = pidConsts.Kp_H * actErrorH;
 			iTerm = pidConsts.Ki_H/10 * errorH;
+
 			if(iTerm > 50){
 				iTerm = 50;
+			} else if (iTerm < -50) {
+				iTerm = -50;
 			}
+//
+//			if (signbit(errorH) != signbit(actErrorH)){
+//				errorL = 0;
+//			}
+
 			//iTerm = 0;
 			dTerm = pidConsts.Kd_H * (preErrorH - actErrorH);
 			//dTerm = 0;
 
 			preErrorH = actErrorH;
 
-			PIDHCalc = pTerm + iTerm + dTerm;
-
+			PIDHCalc = (pTerm + iTerm + dTerm);
+			//printf("Current Error: %d  PID output: %d  \n\r", actErrorH, PIDHCalc);
 			PIDHFlag = 0;
 		}
 
@@ -80,9 +88,17 @@ signed int calcPID(char link, int setPoint, int actPos){
 			errorL = errorL + actErrorL;
 			pTerm = pidConsts.Kp_L * actErrorL;
 			iTerm = pidConsts.Ki_L/10 * errorL;
+
 			if(iTerm > 50){
 				iTerm = 50;
+			} else if (iTerm < -50) {
+				iTerm = -50;
 			}
+
+			if (signbit(errorL) != signbit(actErrorL)){
+				errorL = 0;
+			}
+
 			//iTerm = 0;
 			dTerm = pidConsts.Kd_L * (preErrorL - actErrorL);
 			//dTerm = 0;

@@ -73,11 +73,11 @@ void driveLinkPIDDir(int link,  int pwr){
 		break;
 	case 1: //high link
 		//printf("    actErrorH: %d", actErrorH);
-		if( actErrorH < 0){
+		if( actErrorH > 0){
 			setDAC(2, 0);
 			setDAC(3, pwr);
 
-		} else if(actErrorH > 0){
+		} else if(actErrorH < 0){
 			setDAC(2, pwr);
 			setDAC(3, 0);
 		}
