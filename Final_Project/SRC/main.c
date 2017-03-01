@@ -23,7 +23,7 @@
 #define TEST_ARMXY 13
 #define FINAL_RUN 14
 
-#define MODE STREAM
+#define MODE FINAL_RUN
 
 
 
