@@ -95,7 +95,7 @@ double Dis2;
 
 int IN_PROGRESS;
 
-
+int feedFwd;
 
 void initGlobals();
 

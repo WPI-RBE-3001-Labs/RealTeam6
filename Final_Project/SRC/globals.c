@@ -39,6 +39,8 @@ void initGlobals(){
 	PIDHCalc = 0;
 	PIDLCalc = 0;
 
+	feedFwd = 0;
+
 	infraOneFlag = 0;
 	infraTwoFlag = 0;
 

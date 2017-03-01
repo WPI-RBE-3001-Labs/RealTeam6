@@ -23,7 +23,7 @@
 #define TEST_ARMXY 13
 #define FINAL_RUN 14
 
-#define MODE STREAM
+#define MODE FINAL_RUN
 
 
 
@@ -57,12 +57,18 @@ int LOW_1 =39;
 int HIGH_1 =-89;
 int LOW_2 =40;
 int HIGH_2 =-87;
-int LOW_3 =43;
-int HIGH_3 =-93;
-int LOW_4= 47;
-int HIGH_4= -103;
+int LOW_3 =46;
+int HIGH_3 =-96;
+int LOW_4= 48;
+int HIGH_4= -105;
 int LOW_5 =49;
 int HIGH_5 =-108;
+
+/////current values///
+double curLtotal = 0;
+double curHtotal = 0;
+double curHAverage;
+double curLAverage;
 
 
 int main(){
@@ -214,10 +220,10 @@ int main(){
 
 		while(1){
 			//homeArm();
-			gotoAngles(90, 0);
+			gotoAngles(69, -90);
 			calcEncoder(0);
 			calcEncoder(1);
-			printf("Low Angle, %f, High Angle, %f, Accel X, %d, Accel Y, %d, Accel Z, %d, EncoderL, %ld, EncoderH, %ld \n\r", ADCtoAngleH(getADC(LOWARMPOT)),
+			printf("Low Angle, %f, High Angle, %f, Accel X, %d, Accel Y, %d, Accel Z, %d, EncoderL, %ld, EncoderH, %ld \n\r", ADCtoAngleL(getADC(LOWARMPOT)),
 					ADCtoAngleH(getADC(HIGHARMPOT)), GetAccelerationH48C(0), GetAccelerationH48C(2), GetAccelerationH48C(3), encOne, encTwo);
 
 		}
@@ -263,13 +269,13 @@ int main(){
 			storeDistance(2);
 			readInfra(); //then run this to get the new one
 			printf("Sensor Value: %d, Averaged Value: %f, Calculated Distance: %f\n\r", IR1, calcInfraAvg(1), calcBeltPos(calcInfraAvg(1)));
-//			if(calcInfraAvg(1) >= 340){
-//				printf("Block in First IR! \n\r");
-//			} else if(calcInfraAvg(2) >= 340){
-//				printf("Block in Second IR! \n\r");
-//			} else {
-//				printf("beep boop. nothing here boss\n\r");
-//			}
+			//			if(calcInfraAvg(1) >= 340){
+			//				printf("Block in First IR! \n\r");
+			//			} else if(calcInfraAvg(2) >= 340){
+			//				printf("Block in Second IR! \n\r");
+			//			} else {
+			//				printf("beep boop. nothing here boss\n\r");
+			//			}
 
 		}
 		break;//end of case TEST belt
@@ -301,24 +307,33 @@ int main(){
 		stopMotors();
 		runBelt();
 
+		//set PID constants for this state
+		setConst('L', KP+90, KI, KD);
+		setConst('H', KP+40, KI, KD);
+
 		while(1){
 
 			switch(FINAL_RUN_STATE){
 
 			case DETECT_BLOCK:
-				//set PID constants for this state
-				setConst('L', KP+90, KI, KD);
-				setConst('H', KP+40, KI, KD);
+				stopMotors();
+
 
 				//home the arm in prep for rest of run
 				//homePos();
 
 				storeDistance();
 
-				printf("IR1,  %f,  IR2, %f\n\r", calcInfraAvg(1), calcInfraAvg(2));
-				Dis1 = calcInfraAvg(1);
-				if(Dis1 <= 16.8){
-					_delay_ms(50);
+				double avg1 = calcInfraAvg(1);
+				double avg2 = calcInfraAvg(2);
+
+				printf("IR1,  %f,  IR2, %f\n\r", avg1, avg2);
+
+				if(avg1 <= 16){
+					_delay_ms(250);
+					storeDistance();
+					storeDistance();
+					storeDistance();
 					storeDistance();
 					storeDistance();
 					storeDistance();
@@ -327,19 +342,19 @@ int main(){
 					setConst('H', KP+40, KI, KD);
 
 					printf("distance1 : %f,   ", Dis1);
-					if(Dis1 <= 15.25){
+					if(Dis1 < 14.5){
 						printf("Position 1 \n\r");
 						block_pos = 1;
 						//						gotoAngles(LOW_1+OFFSET, HIGH_1);
-					} else if(Dis1 <= 15.5 && Dis1 > 15.25){
+					} else if(Dis1 >= 14.5 && Dis1 < 14.9){
 						printf("Position 2 \n\r");
 						block_pos = 2;
 						//						gotoAngles(LOW_2+OFFSET, HIGH_2);
-					} else if(Dis1 <= 15.75 && Dis1 > 15.5){
+					} else if(Dis1 >= 14.9 && Dis1 < 15.3){
 						printf("position 3 \n\r");
 						block_pos = 3;
 						//						gotoAngles(LOW_3+OFFSET, HIGH_3);
-					} else if(Dis1 <= 16.25 && Dis1 > 16){
+					} else if(Dis1 >= 15.3 && Dis1 < 15.5){
 						printf("position 4 \n\r");
 						block_pos = 4;
 						//						gotoAngles(LOW_4+OFFSET, HIGH_4);
@@ -353,12 +368,8 @@ int main(){
 				break; //end of DETECT_BLOCK
 
 			case WAIT_FOR_BLOCK:
-				//set PID constants for this state
-				//stopMotors();
-
-
 				openClaw();
-				while(calcInfraAvg(2) >= 20){
+				while(calcInfraAvg(2) >= 15){
 					storeDistance();
 					switch(block_pos){
 					case 1:
@@ -384,30 +395,30 @@ int main(){
 				break; //end of WAIT_FOR_BLOCK
 
 			case GRAB_BLOCK:
-				_delay_ms(3000);
+				_delay_ms(1000);
+				stopMotors();
+				_delay_ms(2200);
 				int pseudoTimer = 0;
-				while(pseudoTimer != 300){
+				while(pseudoTimer != 500){
 					//printf("Low Angle, %f, High Angle, %f\n\r", ADCtoAngleH(getADC(LOWARMPOT)), ADCtoAngleH(getADC(HIGHARMPOT)));
 					switch(block_pos){
 					case 1:
-						gotoAngles(LOW_1, HIGH_1);
+						gotoAngles(LOW_1+5, HIGH_1+5);
 						break;
 					case 2:
-						gotoAngles(LOW_2, HIGH_2);
+						gotoAngles(LOW_2+5, HIGH_2);
 						break;
 					case 3:
-						gotoAngles(LOW_3, HIGH_3);
+						gotoAngles(LOW_3-1, HIGH_3);
 						break;
 					case 4:
-						gotoAngles(LOW_4, HIGH_4);
+						gotoAngles(LOW_4, HIGH_4+1);
 						break;
 					case 5:
 						gotoAngles(LOW_5, HIGH_5);
 						break;
 					}
 					pseudoTimer ++;
-
-
 				}
 				closeClaw();
 				stopMotors();
@@ -416,15 +427,38 @@ int main(){
 				break; //end of GRAB_BLOCK
 
 			case WEIGH_BLOCK:
+				;
+				pseudoTimer = 0;
+				while(pseudoTimer != 500){
+					gotoAngles(60, -25.9);
 
+					pseudoTimer ++;
+				}
+				curLtotal = 0;
+				for(int i = 0; i < 20; i++){
+					curLtotal += fabs(readCurrent(1));
+				}
+				curLAverage = (curLtotal)/20;
+
+				printf("current L: %lf \n\r", curLAverage);
+
+
+				if(curLAverage < 60){
+					printf("light block");
+					FINAL_RUN_STATE = DROP_LIGHT_BLOCK;
+				} else if (curLAverage > 100){
+					printf("heavy block");
+					FINAL_RUN_STATE = DROP_HEAVY_BLOCK;
+				}
+				stopMotors();
 				break; //end of WEIGH_BLOCK
 
 			case DROP_LIGHT_BLOCK:
-
+				gotoAngles(110, -110);
 				break; //end of DROP_LIGHT_BLOCK
 
 			case DROP_HEAVY_BLOCK:
-
+				gotoAngles(0, -10);
 				break; //end of DROP_HEAVY_BLOCK
 
 			}//end of FINAL_RUN_STATE switch case

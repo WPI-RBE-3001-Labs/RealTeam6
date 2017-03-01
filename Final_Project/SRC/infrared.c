@@ -41,7 +41,6 @@ void readInfra(){
 
 void storeDistance(){
 	readInfra();
-
 	//printf("IR1,  %f,  IR2, %f\n\r", Dis1, Dis2);
 
 	if(infraOneDataFlag){
