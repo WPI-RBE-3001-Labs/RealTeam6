@@ -23,7 +23,7 @@
 #define TEST_ARMXY 13
 #define FINAL_RUN 14
 
-#define MODE FINAL_RUN
+#define MODE STREAM
 
 
 
@@ -223,9 +223,9 @@ int main(){
 			gotoAngles(69, -90);
 			calcEncoder(0);
 			calcEncoder(1);
-			printf("Low Angle, %f, High Angle, %f, Accel X, %d, Accel Y, %d, Accel Z, %d, EncoderL, %ld, EncoderH, %ld \n\r", ADCtoAngleL(getADC(LOWARMPOT)),
-					ADCtoAngleH(getADC(HIGHARMPOT)), GetAccelerationH48C(0), GetAccelerationH48C(2), GetAccelerationH48C(3), encOne, encTwo);
-
+			//			printf("Low Angle, %f, High Angle, %f, Accel X, %d, Accel Y, %d, Accel Z, %d, EncoderL, %ld, EncoderH, %ld \n\r", ADCtoAngleL(getADC(LOWARMPOT)),
+			//					ADCtoAngleH(getADC(HIGHARMPOT)), GetAccelerationH48C(0), GetAccelerationH48C(2), GetAccelerationH48C(3), encOne, encTwo);
+			printf("%d,%d,\n\r",(int)ADCtoAngleH(getADC(LOWARMPOT)),(int)ADCtoAngleH(getADC(HIGHARMPOT)));
 		}
 		break;
 
