@@ -10,5 +10,7 @@
 
 void printPotVal();
 void printPWMVal();
+void printPos();
+void printPID(int highTarget, int lowTarget);
 
 #endif /* SRC_PRINTSTATEMENTS_H_ */

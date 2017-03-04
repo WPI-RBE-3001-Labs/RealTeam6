@@ -18,32 +18,41 @@
 
 void initInfra(){
 
-	initADC(7);
-	initADC(6);
+	initADC(IR2PORT);
+	initADC(IR1PORT);
 
 }
 
 void readInfra(){
 	if(infraOneFlag || infraTwoFlag){
-		IR1 = getADC(6);
-		IR2 = getADC(7);
+		IR1 = getADC(IR1PORT);
+		IR2 = getADC(IR2PORT);
+
+		Dis1 = ADCtoDistance(IR1);
+		Dis2 = ADCtoDistance(IR2);
+
 		infraOneFlag = 0;
 		infraTwoFlag = 0;
 		infraOneDataFlag = 1;
 		infraTwoDataFlag = 1;
+
 	}
 }
 
-void storeDistance(int sensor){
-	if(sensor == 1 && infraOneDataFlag){
+void storeDistance(){
+	readInfra();
+	//printf("IR1,  %f,  IR2, %f\n\r", Dis1, Dis2);
+
+	if(infraOneDataFlag){
 		IR1_3 = IR1_2;
 		IR1_2 = IR1_1;
-		IR1_1 = IR1;
+		IR1_1 = Dis1;
 		infraOneDataFlag = 0;
-	} else if (sensor == 2 && infraTwoDataFlag){
+	}
+	if (infraTwoDataFlag){
 		IR2_3 = IR2_2;
 		IR2_2 = IR2_1;
-		IR2_1 = IR2;
+		IR2_1 = Dis2;
 		infraTwoDataFlag = 0;
 	}
 }

@@ -40,7 +40,7 @@ void homeArm(){
 		highPID = calcPID('H', 0, ADCtoAngleH(getADC(HIGHARMPOT)));
 		driveLinkPIDDir(1, highPID);
 
-		if(actErrorH <= 3 && actErrorL <= 3 && actErrorH >= -3 && actErrorL >= -3){
+		if(actErrorH <= 2 && actErrorL <= 2 && actErrorH >= -2 && actErrorL >= -2){
 			printf("STAHP");
 			stopMotors();
 			//set the encoder variables to zero

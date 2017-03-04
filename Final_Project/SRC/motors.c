@@ -45,15 +45,17 @@ void gotoAngles(int lowerTheta, int upperTheta){
  */
 void gotoXY(int x, int y){
 
-	//https://ashwinnarayan.blogspot.com/2014/07/inverse-kinematics-for-2dof-arm.html
-	//for equation
-
 	int LTheta, HTheta;
-	HTheta = atan2(sqrt(1-((x*x+y*y-6*6-4.25*4.25)/(2*6*4.25)) ), ((x*x+y*y-6*6-4.25*4.25)/(2*6*4.25)));
-	int K1 = 6 + 4.25*cos(HTheta);
-	int K2 = 4.25*sin(HTheta);
-	int lamda = atan2(K1,K2);
-	LTheta = atan2(y,x)-lamda;
+
+	double x_ref = x;
+	double y_ref = y - 4.5;
+
+	HTheta = -(acos(((pow(x_ref,2.0)+pow(y_ref,2.0))-(pow(LOWER_LEN,2.0)+pow(UPPER_LEN,2.0)))/(2.0*LOWER_LEN*UPPER_LEN)) * 180.0 / M_PI);
+
+	LTheta = (atan2(x_ref,y_ref) - acos((pow(x_ref,2.0)+pow(y_ref,2.0)+pow(LOWER_LEN,2.0)-pow(UPPER_LEN,2.0))/(2.0*LOWER_LEN*sqrt(pow(x_ref,2.0)+pow(y_ref,2.0))))) * 180.0 / M_PI;
+
+	printf("Calc Low Angle, %d, Calc High Angle, %d ,", LTheta, HTheta);
+	printPos();
 
 	gotoAngles(LTheta, HTheta);
 
@@ -76,7 +78,7 @@ void driveLink(int link, int dir){
 			setDAC(0, 0);
 			setDAC(1, 3000);
 		}
-	break;
+		break;
 	case 1: //high link
 		if(dir){
 			setDAC(2, 3000);
@@ -85,7 +87,7 @@ void driveLink(int link, int dir){
 			setDAC(2, 0);
 			setDAC(3, 3000);
 		}
-	break;
+		break;
 	}
 
 }
@@ -98,5 +100,5 @@ void driveLink(int link, int dir){
  * @todo Drive the arm to a known position using the potentiometers.
  */
 void homePos(){
-
+	gotoAngles(90,-90);
 }
